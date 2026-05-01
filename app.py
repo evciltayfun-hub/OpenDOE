@@ -22,138 +22,249 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── Custom CSS ───────────────────────────────────────────────────────────────
+# ─── Custom CSS — Theme: Arctic Lab (Option B) ────────────────────────────────
 st.markdown("""
 <style>
-  /* ── Sidebar ──────────────────────────────────────── */
+  /* ════════════════════════════════════════════════════
+     ARCTIC LAB — Clean Scientific
+     Sidebar: #1e3a5f navy  |  Content: white / #f8fafc
+     Accent:  #0891b2 teal  |  Secondary: #059669 green
+  ════════════════════════════════════════════════════ */
+
+  /* ── Page background ───────────────────────────────── */
+  .stApp { background-color: #f0f5fa; }
+  .block-container { background: transparent; }
+
+  /* ── Sidebar ───────────────────────────────────────── */
   [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #0c1424 0%, #102040 60%, #0e3052 100%);
+    background: linear-gradient(180deg, #132b4a 0%, #1a3a5c 55%, #1e4474 100%);
+    border-right: 1px solid #14324f;
   }
-  [data-testid="stSidebar"] * { color: #dde6f0 !important; }
+  [data-testid="stSidebar"] * { color: #cfe2f0 !important; }
+  [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.10) !important; }
+
+  /* Nav items */
   [data-testid="stSidebar"] .stRadio > label { display: none; }
   [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
-    background: rgba(255,255,255,0.04);
+    background: transparent;
     border-radius: 8px;
-    padding: 10px 14px;
-    margin-bottom: 3px;
+    padding: 9px 14px;
+    margin-bottom: 2px;
     display: block;
     transition: background 0.15s;
-    font-size: 0.93rem;
+    font-size: 0.92rem;
     border-left: 3px solid transparent;
+    color: #a8c4d8 !important;
   }
   [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-    background: rgba(255,255,255,0.10);
+    background: rgba(14,165,233,0.12);
+    color: #7dd3fc !important;
+  }
+  [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label[data-checked="true"] {
+    background: rgba(14,165,233,0.18);
+    border-left: 3px solid #0ea5e9;
+    color: #7dd3fc !important;
   }
 
-  /* ── Metrics ──────────────────────────────────────── */
+  /* ── Main content card wrapper ─────────────────────── */
+  [data-testid="stMainBlockContainer"] > div > div > div {
+    background: transparent;
+  }
+
+  /* ── Metric cards ──────────────────────────────────── */
   [data-testid="metric-container"] {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: white;
+    border: 1px solid #dce8f2;
+    border-top: 3px solid #0891b2;
     border-radius: 10px;
     padding: 14px 18px;
+    box-shadow: 0 1px 6px rgba(8,145,178,0.07);
+  }
+  [data-testid="metric-container"] [data-testid="stMetricValue"] {
+    color: #0369a1 !important;
+    font-weight: 800;
   }
 
-  /* ── Step cards ───────────────────────────────────── */
+  /* ── Section panels ────────────────────────────────── */
+  .fl-panel {
+    background: white;
+    border: 1px solid #dce8f2;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    margin-bottom: 16px;
+  }
+
+  /* ── Step cards ────────────────────────────────────── */
   .fl-step-card {
     background: white;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #dce8f2;
     border-radius: 14px;
-    padding: 22px 20px 18px 20px;
+    padding: 24px 18px 20px 18px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(8,145,178,0.06);
     height: 100%;
-    transition: box-shadow 0.2s, transform 0.2s;
+    transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
   }
   .fl-step-card:hover {
-    box-shadow: 0 6px 18px rgba(30,64,175,0.13);
-    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(8,145,178,0.15);
+    border-color: #7dd3fc;
+    transform: translateY(-3px);
   }
-  .fl-step-icon {
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-  }
+  .fl-step-icon { font-size: 2.2rem; margin-bottom: 10px; }
   .fl-step-num {
     display: inline-block;
-    background: #1e40af;
+    background: linear-gradient(135deg, #0369a1, #0891b2);
     color: white !important;
     border-radius: 50%;
-    width: 26px; height: 26px;
-    line-height: 26px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    margin-bottom: 8px;
+    width: 28px; height: 28px; line-height: 28px;
+    font-size: 0.78rem; font-weight: 800; margin-bottom: 10px;
   }
-  .fl-step-title {
-    font-weight: 700;
-    font-size: 1.0rem;
-    color: #0f172a;
-    margin-bottom: 6px;
-  }
-  .fl-step-desc {
-    font-size: 0.82rem;
-    color: #64748b;
-    line-height: 1.45;
-  }
+  .fl-step-title { font-weight: 700; font-size: 1.0rem; color: #0c2d4e; margin-bottom: 6px; }
+  .fl-step-desc  { font-size: 0.82rem; color: #64748b; line-height: 1.5; }
   .fl-arrow {
-    font-size: 1.5rem;
-    color: #cbd5e1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding-top: 36px;
+    font-size: 1.6rem; color: #bae6fd;
+    display: flex; align-items: center; justify-content: center;
+    height: 100%; padding-top: 40px;
   }
 
-  /* ── Hero banner ──────────────────────────────────── */
+  /* ── Hero banner ───────────────────────────────────── */
   .fl-hero {
-    background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 50%, #0e7490 100%);
+    background: linear-gradient(135deg, #0c2d4e 0%, #1e3a5f 45%, #0c6e8a 100%);
     border-radius: 16px;
-    padding: 36px 40px;
+    padding: 38px 44px;
     color: white;
     margin-bottom: 28px;
+    border: 1px solid #1e4d6b;
+    box-shadow: 0 4px 24px rgba(12,45,78,0.25);
   }
-  .fl-hero h1 { color: white !important; font-size: 2.4rem !important; margin: 0; }
-  .fl-hero p  { color: #bfdbfe; margin: 8px 0 0 0; font-size: 1.05rem; }
+  .fl-hero h1 { color: #f0f9ff !important; font-size: 2.5rem !important; margin: 0; font-weight: 800; }
+  .fl-hero p  { color: #7dd3fc; margin: 10px 0 0 0; font-size: 1.05rem; letter-spacing: 0.2px; }
 
-  /* ── Feature badge ────────────────────────────────── */
+  /* ── Feature badge ─────────────────────────────────── */
   .fl-badge {
     display: inline-block;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
+    background: #e0f7fa;
+    border: 1px solid #b2ebf2;
     border-radius: 20px;
     padding: 3px 12px;
     font-size: 0.78rem;
-    color: #1e40af;
+    color: #006064;
     font-weight: 600;
     margin: 3px 3px 3px 0;
   }
 
-  /* ── Compare table ────────────────────────────────── */
-  .fl-compare td { padding: 6px 14px; font-size: 0.87rem; }
-  .fl-compare th { background: #f1f5f9; padding: 8px 14px; font-size: 0.83rem; color: #475569; }
+  /* ── Compare table ─────────────────────────────────── */
+  .fl-compare td { padding: 7px 14px; font-size: 0.87rem; border-bottom: 1px solid #f1f5f9; }
+  .fl-compare th { background: #f0f9ff; padding: 9px 14px; font-size: 0.82rem;
+                   color: #0369a1; font-weight: 700; border-bottom: 2px solid #bae6fd; }
 
-  /* ── Buttons ──────────────────────────────────────── */
+  /* ── Primary button ────────────────────────────────── */
   .stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #1e40af, #0e7490);
+    background: linear-gradient(135deg, #0369a1 0%, #0891b2 60%, #059669 100%);
     border: none; border-radius: 8px; font-weight: 600;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(8,145,178,0.3);
+    transition: all 0.2s;
   }
   .stButton > button[kind="primary"]:hover {
-    background: linear-gradient(135deg, #1d4ed8, #0891b2);
+    background: linear-gradient(135deg, #0284c7 0%, #06b6d4 60%, #10b981 100%);
+    box-shadow: 0 4px 14px rgba(8,145,178,0.4);
     transform: translateY(-1px);
   }
-
-  /* ── Tabs ─────────────────────────────────────────── */
-  .stTabs [data-baseweb="tab-list"] {
-    gap: 4px; background: #f1f5f9; border-radius: 10px; padding: 4px;
+  /* Secondary / default button */
+  .stButton > button:not([kind="primary"]) {
+    border: 1px solid #bae6fd !important;
+    color: #0369a1 !important;
+    background: white !important;
+    border-radius: 8px;
+    font-weight: 500;
   }
-  .stTabs [data-baseweb="tab"] { border-radius: 8px; padding: 8px 18px; }
-  .stTabs [aria-selected="true"] { background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.10); }
+  .stButton > button:not([kind="primary"]):hover {
+    background: #f0f9ff !important;
+    border-color: #0891b2 !important;
+  }
 
-  h1 { color: #0f172a; }
-  h2, h3 { color: #1e3a5f; }
-  .stAlert { border-radius: 8px; }
-  .stSuccess { border-left: 4px solid #10b981; }
-  hr { border-color: #e2e8f0; }
+  /* ── Tabs ──────────────────────────────────────────── */
+  .stTabs [data-baseweb="tab-list"] {
+    gap: 4px; background: #e8f4fb; border-radius: 10px; padding: 4px;
+    border: 1px solid #c8e3f0;
+  }
+  .stTabs [data-baseweb="tab"] {
+    border-radius: 8px; padding: 8px 20px;
+    color: #5b8fa8 !important; font-weight: 500;
+  }
+  .stTabs [aria-selected="true"] {
+    background: white;
+    box-shadow: 0 1px 6px rgba(8,145,178,0.12);
+    color: #0369a1 !important;
+    font-weight: 700;
+  }
+
+  /* ── Expanders ─────────────────────────────────────── */
+  [data-testid="stExpander"] {
+    border: 1px solid #dce8f2 !important;
+    border-radius: 10px !important;
+    background: white;
+  }
+
+  /* ── Data tables ───────────────────────────────────── */
+  [data-testid="stDataFrame"] {
+    border: 1px solid #dce8f2;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  /* ── Progress & sliders ────────────────────────────── */
+  [data-testid="stProgress"] > div > div {
+    background: linear-gradient(90deg, #0891b2, #059669) !important;
+  }
+
+  /* ── Alerts ────────────────────────────────────────── */
+  .stAlert { border-radius: 10px; }
+  .stSuccess {
+    background: #f0fdf4 !important;
+    border-left: 4px solid #059669 !important;
+    color: #14532d !important;
+  }
+  .stInfo {
+    background: #f0f9ff !important;
+    border-left: 4px solid #0891b2 !important;
+    color: #0c4a6e !important;
+  }
+  .stWarning {
+    background: #fffbeb !important;
+    border-left: 4px solid #f59e0b !important;
+  }
+
+  /* ── Typography ─────────────────────────────────────── */
+  h1 { color: #0c2d4e !important; font-weight: 800; }
+  h2 { color: #0c4a6e !important; font-weight: 700; }
+  h3 { color: #075985 !important; font-weight: 600; }
+  hr { border-color: #dce8f2 !important; margin: 20px 0; }
+
+  /* ── Input fields ──────────────────────────────────── */
+  [data-testid="stTextInput"] > div > div > input,
+  [data-testid="stNumberInput"] > div > div > input {
+    border-radius: 7px !important;
+    border: 1px solid #c8e3f0 !important;
+  }
+  [data-testid="stTextInput"] > div > div > input:focus,
+  [data-testid="stNumberInput"] > div > div > input:focus {
+    border-color: #0891b2 !important;
+    box-shadow: 0 0 0 3px rgba(8,145,178,0.12) !important;
+  }
+  [data-testid="stSelectbox"] > div > div {
+    border-radius: 7px !important;
+    border: 1px solid #c8e3f0 !important;
+  }
+
+  /* ── Divider ───────────────────────────────────────── */
+  .fl-divider {
+    height: 2px;
+    background: linear-gradient(90deg, #0891b2, #059669, transparent);
+    border-radius: 2px; margin: 24px 0;
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -182,14 +293,18 @@ _init_state()
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(f"""
-    <div style="padding: 18px 4px 10px 4px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:2rem;">🔬</span>
+    <div style="padding: 20px 6px 12px 6px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="background:linear-gradient(135deg,#0891b2,#059669);
+                        border-radius:10px; width:42px; height:42px;
+                        display:flex; align-items:center; justify-content:center;
+                        font-size:1.4rem; flex-shrink:0;">🔬</div>
             <div>
-                <div style="font-size:1.45rem; font-weight:800; letter-spacing:-0.5px; color:#f1f5f9;">
+                <div style="font-size:1.4rem; font-weight:800; letter-spacing:-0.5px; color:#f0f9ff;">
                     {APP_NAME}
                 </div>
-                <div style="font-size:0.72rem; color:#64a3c8; letter-spacing:1.5px; text-transform:uppercase;">
+                <div style="font-size:0.65rem; color:#7dd3fc; letter-spacing:2px;
+                            text-transform:uppercase; font-weight:500; margin-top:1px;">
                     {APP_TAGLINE}
                 </div>
             </div>
@@ -242,7 +357,7 @@ with st.sidebar:
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.divider()
-    st.markdown(f"<span style='color:#475569; font-size:0.75rem;'>v{APP_VERSION} · Open Source · Free Forever</span>",
+    st.markdown(f"<span style='color:#5b8fa8; font-size:0.74rem;'>v{APP_VERSION} &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; Free Forever</span>",
                 unsafe_allow_html=True)
     if st.button("🗑️ New Experiment", use_container_width=True):
         for k in ["experiment", "models", "optimization", "ai_history", "wizard_step"]:
@@ -393,10 +508,12 @@ def _render_experiment_dashboard(exp):
     has_opt    = bool(st.session_state.get("optimization"))
 
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-                border: 1px solid #bae6fd; border-radius: 14px; padding: 20px 28px; margin-bottom: 20px;">
-        <div style="font-size:1.4rem; font-weight:800; color:#0c4a6e;">🔬 {exp['name']}</div>
-        <div style="color:#0369a1; font-size:0.9rem; margin-top:4px;">
+    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+                border: 1px solid #bae6fd; border-left: 5px solid #0891b2;
+                border-radius: 12px; padding: 20px 28px; margin-bottom: 22px;
+                box-shadow: 0 2px 10px rgba(8,145,178,0.08);">
+        <div style="font-size:1.4rem; font-weight:800; color:#0c2d4e;">🔬 {exp['name']}</div>
+        <div style="color:#0369a1; font-size:0.88rem; margin-top:5px; font-weight:500;">
             {exp.get('design_type_name','—')} &nbsp;·&nbsp;
             {len(exp.get('factors',[]))} factors &nbsp;·&nbsp;
             {len(exp.get('responses',[]))} responses
@@ -422,18 +539,27 @@ def _render_experiment_dashboard(exp):
     pcols = st.columns(4)
     for i, (label, done, target_page) in enumerate(pipeline):
         with pcols[i]:
-            color = "#10b981" if done else "#e2e8f0"
-            icon  = "✅" if done else "○"
-            st.markdown(f"""
-            <div style="border:2px solid {color}; border-radius:10px; padding:14px;
-                        text-align:center; background:{'#f0fdf4' if done else '#fafafa'};">
-                <div style="font-size:1.1rem;">{icon}</div>
-                <div style="font-weight:600; font-size:0.85rem; color:{'#065f46' if done else '#94a3b8'};">
-                    {label}</div>
-            </div>
-            """, unsafe_allow_html=True)
-            if not done:
-                if st.button(f"Go →", key=f"go_{i}", use_container_width=True):
+            if done:
+                st.markdown(f"""
+                <div style="border:1px solid #a7f3d0; border-top:3px solid #059669;
+                            border-radius:10px; padding:14px; text-align:center;
+                            background:#f0fdf4; box-shadow:0 1px 4px rgba(5,150,105,0.08);">
+                    <div style="font-size:1.3rem;">✅</div>
+                    <div style="font-weight:700; font-size:0.83rem; color:#065f46; margin-top:4px;">
+                        {label}</div>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                <div style="border:1px solid #bae6fd; border-top:3px solid #0891b2;
+                            border-radius:10px; padding:14px; text-align:center;
+                            background:white; box-shadow:0 1px 4px rgba(8,145,178,0.06);">
+                    <div style="font-size:1.3rem;">◻️</div>
+                    <div style="font-weight:600; font-size:0.83rem; color:#0369a1; margin-top:4px;">
+                        {label}</div>
+                </div>
+                """, unsafe_allow_html=True)
+                if st.button(f"Start →", key=f"go_{i}", use_container_width=True):
                     st.session_state.page = target_page
                     st.rerun()
 
@@ -459,14 +585,17 @@ def _render_experiment_dashboard(exp):
         st.markdown("#### Optimization Result")
         c1, c2 = st.columns([1, 2])
         with c1:
-            color = "#10b981" if d > 0.7 else ("#f59e0b" if d > 0.4 else "#ef4444")
+            d_color = "#059669" if d > 0.7 else ("#f59e0b" if d > 0.4 else "#ef4444")
+            d_label = "🟢 Excellent (≥ 0.7)" if d >= 0.7 else ("🟡 Acceptable (≥ 0.4)" if d >= 0.4 else "🔴 Low — review limits")
             st.markdown(f"""
-            <div style="text-align:center; padding:24px 16px;
-                        background:{color}18; border-radius:14px; border:2px solid {color};">
-                <div style="font-size:2.8rem; font-weight:900; color:{color};">{d:.2f}</div>
-                <div style="font-size:0.85rem; font-weight:600; color:{color};">Overall Desirability</div>
-                <div style="font-size:0.75rem; color:#64748b; margin-top:4px;">
-                    {'Excellent ≥ 0.7' if d>=0.7 else ('Acceptable ≥ 0.4' if d>=0.4 else 'Low — review limits')}</div>
+            <div style="text-align:center; padding:26px 16px;
+                        background:{d_color}10; border-radius:14px;
+                        border:2px solid {d_color}40;
+                        box-shadow:0 2px 14px {d_color}20;">
+                <div style="font-size:3rem; font-weight:900; color:{d_color}; line-height:1;">{d:.2f}</div>
+                <div style="font-size:0.78rem; font-weight:700; color:{d_color}; text-transform:uppercase;
+                            letter-spacing:1px; margin-top:6px;">Overall Desirability</div>
+                <div style="font-size:0.75rem; color:#64748b; margin-top:8px;">{d_label}</div>
             </div>
             """, unsafe_allow_html=True)
         with c2:

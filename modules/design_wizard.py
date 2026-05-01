@@ -7,6 +7,109 @@ from utils.doe_engine import (
     design_to_excel, get_run_count, get_design_recommendations
 )
 
+# ─── Unit Catalogue ───────────────────────────────────────────────────────────
+_FACTOR_UNITS = {
+    "Temperature":   ["°C", "°F", "K"],
+    "Pressure":      ["bar", "mbar", "MPa", "kPa", "Pa", "psi", "atm"],
+    "Time":          ["s", "min", "h", "days"],
+    "Mass / Weight": ["g", "kg", "mg", "µg", "ton"],
+    "Volume":        ["mL", "L", "µL", "m³", "cm³"],
+    "Concentration": ["%", "wt%", "vol%", "g/L", "mg/L", "µg/L", "mol/L", "mmol/L", "ppm", "ppb"],
+    "Flow rate":     ["mL/min", "L/min", "L/h", "m³/h", "mL/s"],
+    "Speed / RPM":   ["rpm", "rad/s", "m/s", "Hz"],
+    "Length / Size": ["mm", "cm", "m", "µm", "nm"],
+    "pH / Ratio":    ["pH", "ratio", "(—)"],
+    "Energy / Power":["J", "kJ", "W", "kW", "kWh"],
+    "Dosage":        ["%", "g/ton", "kg/t", "g/L", "ppm"],
+    "Custom →":      ["Custom..."],
+}
+
+_RESPONSE_UNITS = {
+    "Strength / Force":  ["kg", "N", "kN", "MPa", "kPa", "bar"],
+    "Percentage":        ["%", "wt%", "vol%", "ppm", "ppb"],
+    "Mass / Yield":      ["g", "kg", "ton", "g/L"],
+    "Index / Score":     ["(—)", "index", "ratio"],
+    "Drop / Count":      ["drops", "count", "times"],
+    "Temperature":       ["°C", "°F", "K"],
+    "Time":              ["s", "min", "h"],
+    "Energy":            ["kJ", "kWh", "J"],
+    "Custom →":          ["Custom..."],
+}
+
+# keyword → category auto-suggest
+_FACTOR_KEYWORDS = {
+    "temp": "Temperature", "sıcaklık": "Temperature",
+    "press": "Pressure", "basınç": "Pressure",
+    "time": "Time", "süre": "Time", "duration": "Time",
+    "mass": "Mass / Weight", "weight": "Mass / Weight", "kütle": "Mass / Weight",
+    "vol": "Volume", "hacim": "Volume",
+    "conc": "Concentration", "dose": "Dosage", "dosage": "Dosage",
+    "binder": "Dosage", "bentonite": "Dosage", "kempel": "Dosage",
+    "flow": "Flow rate", "akış": "Flow rate",
+    "speed": "Speed / RPM", "rpm": "Speed / RPM", "agit": "Speed / RPM",
+    "size": "Length / Size", "length": "Length / Size", "boyut": "Length / Size",
+    "ph": "pH / Ratio", "ratio": "pH / Ratio",
+}
+
+_RESPONSE_KEYWORDS = {
+    "strength": "Strength / Force", "drop": "Drop / Count",
+    "tumbl": "Percentage", "index": "Index / Score",
+    "yield": "Percentage", "purity": "Percentage",
+    "fe": "Percentage", "sio2": "Percentage", "iron": "Percentage",
+    "temp": "Temperature", "time": "Time", "energy": "Energy",
+}
+
+
+def _detect_category(name: str, keyword_map: dict, default_cat: str) -> str:
+    nl = name.lower()
+    for kw, cat in keyword_map.items():
+        if kw in nl:
+            return cat
+    return default_cat
+
+
+def _unit_selector(label: str, current_unit: str, key: str,
+                   unit_dict: dict, keyword_map: dict,
+                   factor_name: str = "") -> str:
+    """
+    Smart unit selector: shows a category selectbox + unit selectbox.
+    Returns the chosen unit string.
+    """
+    # Detect best initial category
+    detected_cat = _detect_category(factor_name, keyword_map, list(unit_dict.keys())[0])
+
+    # Find current unit's category (for re-loading saved state)
+    current_cat = detected_cat
+    for cat, units in unit_dict.items():
+        if current_unit in units:
+            current_cat = cat
+            break
+
+    cat_keys = list(unit_dict.keys())
+    cat_idx  = cat_keys.index(current_cat) if current_cat in cat_keys else 0
+
+    col_cat, col_unit = st.columns([2, 3])
+    with col_cat:
+        chosen_cat = st.selectbox(
+            label, cat_keys, index=cat_idx,
+            key=f"{key}_cat", label_visibility="visible",
+        )
+    with col_unit:
+        units_in_cat = unit_dict[chosen_cat]
+        if units_in_cat == ["Custom..."]:
+            # Custom free-text
+            chosen_unit = st.text_input("Value", value=current_unit,
+                                        key=f"{key}_custom",
+                                        placeholder="e.g. mS/cm",
+                                        label_visibility="visible")
+        else:
+            default_idx = units_in_cat.index(current_unit) if current_unit in units_in_cat else 0
+            chosen_unit = st.selectbox(
+                "Unit", units_in_cat, index=default_idx,
+                key=f"{key}_val", label_visibility="visible",
+            )
+    return chosen_unit
+
 STEPS = ["Experiment Setup", "Define Factors", "Define Responses",
          "Select Design", "Review & Generate"]
 
@@ -22,18 +125,34 @@ def render_design_wizard():
     if "wizard_step" not in st.session_state:
         st.session_state.wizard_step = 1
 
-    # Step indicator
-    cols = st.columns(len(STEPS))
-    for i, (col, label) in enumerate(zip(cols, STEPS), 1):
-        with col:
-            if i < st.session_state.wizard_step:
-                st.success(f"✓ {label}")
-            elif i == st.session_state.wizard_step:
-                st.info(f"▶ {label}")
-            else:
-                st.markdown(f"<span style='color:#9ca3af'>○ {label}</span>", unsafe_allow_html=True)
-
-    st.divider()
+    # Step indicator — Arctic Lab style
+    current = st.session_state.wizard_step
+    parts = []
+    for i, label in enumerate(STEPS, 1):
+        if i < current:
+            bg, border, fg, num_bg = "#f0fdf4", "#a7f3d0", "#065f46", "#059669"
+            icon = "✓"
+        elif i == current:
+            bg, border, fg, num_bg = "#f0f9ff", "#7dd3fc", "#0369a1", "#0891b2"
+            icon = str(i)
+        else:
+            bg, border, fg, num_bg = "#f8fafc", "#e2e8f0", "#94a3b8", "#cbd5e1"
+            icon = str(i)
+        parts.append(f"""
+        <div style="background:{bg}; border:1px solid {border}; border-radius:10px;
+                    padding:10px 8px; text-align:center; flex:1; min-width:0;">
+            <span style="background:{num_bg}; color:white; border-radius:50%;
+                         width:22px; height:22px; display:inline-flex; align-items:center;
+                         justify-content:center; font-size:0.72rem; font-weight:800;
+                         margin-bottom:4px;">{icon}</span>
+            <div style="font-size:0.76rem; font-weight:600; color:{fg};
+                        white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{label}</div>
+        </div>
+        """)
+    connector = '<div style="color:#bae6fd; font-size:1rem; padding-top:14px; flex-shrink:0;">›</div>'
+    joined = connector.join(parts)
+    st.markdown(f'<div style="display:flex; gap:6px; align-items:flex-start; margin-bottom:20px;">{joined}</div>',
+                unsafe_allow_html=True)
 
     step = st.session_state.wizard_step
 
@@ -122,27 +241,36 @@ def _step_define_factors():
 
     updated = []
     for i in range(n):
-        st.markdown(f"**Factor {i+1}**")
-        c1, c2, c3, c4, c5 = st.columns([3, 2, 2, 2, 2])
-        with c1:
-            fname = st.text_input("Name", value=factors[i]["name"],
-                                  key=f"fname_{i}", label_visibility="collapsed",
-                                  placeholder="Factor name")
-        with c2:
-            lo = st.number_input("Low", value=float(factors[i]["low"]),
-                                 key=f"flo_{i}", label_visibility="collapsed")
-        with c3:
-            hi = st.number_input("High", value=float(factors[i]["high"]),
-                                 key=f"fhi_{i}", label_visibility="collapsed")
-        with c4:
-            unit = st.text_input("Unit", value=factors[i]["unit"],
-                                 key=f"funit_{i}", label_visibility="collapsed",
-                                 placeholder="°C, bar, ...")
-        with c5:
-            ftype = st.selectbox("Type", ["Continuous", "Categorical"],
-                                 index=0 if factors[i].get("type", "Continuous") == "Continuous" else 1,
-                                 key=f"ftype_{i}", label_visibility="collapsed")
+        with st.container():
+            c1, c2, c3, c4 = st.columns([3, 2, 2, 2])
+            with c1:
+                fname = st.text_input(f"Factor {i+1} — Name",
+                                      value=factors[i]["name"],
+                                      key=f"fname_{i}",
+                                      placeholder="e.g. Temperature")
+            with c2:
+                lo = st.number_input("Low value", value=float(factors[i]["low"]),
+                                     key=f"flo_{i}")
+            with c3:
+                hi = st.number_input("High value", value=float(factors[i]["high"]),
+                                     key=f"fhi_{i}")
+            with c4:
+                ftype = st.selectbox("Type", ["Continuous", "Categorical"],
+                                     index=0 if factors[i].get("type","Continuous")=="Continuous" else 1,
+                                     key=f"ftype_{i}")
+
+            unit = _unit_selector(
+                label="Unit category",
+                current_unit=factors[i].get("unit", ""),
+                key=f"funit_{i}",
+                unit_dict=_FACTOR_UNITS,
+                keyword_map=_FACTOR_KEYWORDS,
+                factor_name=fname,
+            )
+
         updated.append({"name": fname, "low": lo, "high": hi, "unit": unit, "type": ftype})
+        if i < n - 1:
+            st.divider()
 
     if _nav(next_label="Next →"):
         errors = []
@@ -178,20 +306,25 @@ def _step_define_responses():
     updated = []
     for i in range(n):
         st.markdown(f"**Response {i+1}**")
-        c1, c2, c3 = st.columns([3, 2, 2])
+        c1, c2 = st.columns([3, 2])
         with c1:
             rname = st.text_input("Name", value=responses[i]["name"],
                                   key=f"rname_{i}", label_visibility="collapsed",
-                                  placeholder="Response name")
+                                  placeholder="e.g. Yield, Dry Strength, Drop Number")
         with c2:
-            unit = st.text_input("Unit", value=responses[i].get("unit", ""),
-                                 key=f"runit_{i}", label_visibility="collapsed",
-                                 placeholder="%, g/L, ...")
-        with c3:
             goal = st.selectbox("Goal", ["Maximize", "Minimize", "Target"],
                                 index=["Maximize", "Minimize", "Target"].index(
                                     responses[i].get("goal", "Maximize")),
                                 key=f"rgoal_{i}", label_visibility="collapsed")
+
+        unit = _unit_selector(
+            label="Unit category",
+            current_unit=responses[i].get("unit", ""),
+            key=f"runit_{i}",
+            unit_dict=_RESPONSE_UNITS,
+            keyword_map=_RESPONSE_KEYWORDS,
+            factor_name=rname,
+        )
 
         c4, c5, c6, c7 = st.columns(4)
         with c4:

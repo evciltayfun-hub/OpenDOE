@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FactorLab — Design Options</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+       background: #111827; color: #f9fafb; padding: 32px; }
+
+h1 { text-align: center; font-size: 1.8rem; margin-bottom: 6px; color: #f9fafb; }
+.subtitle { text-align: center; color: #9ca3af; margin-bottom: 40px; font-size: 0.95rem; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 1400px; margin: 0 auto; }
+
+.theme-card { border-radius: 16px; overflow: hidden; border: 2px solid rgba(255,255,255,0.08);
+              box-shadow: 0 20px 60px rgba(0,0,0,0.5); transition: transform 0.2s, box-shadow 0.2s; }
+.theme-card:hover { transform: translateY(-4px); box-shadow: 0 28px 70px rgba(0,0,0,0.65); }
+
+.theme-label { padding: 14px 20px; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.3px;
+               display: flex; align-items: center; gap: 10px; }
+.badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+
+/* ── APP SHELL ─────────────────────────────────── */
+.app { display: flex; height: 460px; }
+
+.sidebar { width: 180px; flex-shrink: 0; display: flex; flex-direction: column; padding: 16px 10px; gap: 4px; }
+.sidebar-logo { font-size: 1.1rem; font-weight: 800; padding: 8px 10px 14px 10px; letter-spacing: -0.3px; }
+.sidebar-logo span { font-size: 0.62rem; display: block; opacity: 0.55; letter-spacing: 1.2px;
+                     text-transform: uppercase; font-weight: 500; margin-top: 2px; }
+.nav-item { padding: 8px 12px; border-radius: 8px; font-size: 0.77rem; cursor: pointer;
+            transition: background 0.15s; white-space: nowrap; }
+.nav-sep { height: 1px; opacity: 0.15; margin: 8px 4px; }
+.exp-badge { margin-top: auto; padding: 10px 10px; border-radius: 8px; font-size: 0.68rem;
+             line-height: 1.6; opacity: 0.85; }
+.exp-badge b { display: block; font-size: 0.78rem; margin-bottom: 3px; }
+.status-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; }
+
+.main { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+.topbar { padding: 16px 22px 10px 22px; border-bottom: 1px solid; font-size: 0.8rem; }
+.content { flex: 1; padding: 18px 22px; overflow: hidden; }
+
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.metric { padding: 12px 14px; border-radius: 10px; border: 1px solid; }
+.metric-val { font-size: 1.5rem; font-weight: 800; line-height: 1; }
+.metric-lab { font-size: 0.67rem; opacity: 0.6; margin-top: 3px; text-transform: uppercase;
+              letter-spacing: 0.5px; }
+
+.section-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+                 letter-spacing: 0.8px; margin-bottom: 10px; opacity: 0.55; }
+
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.step { padding: 12px 10px; border-radius: 10px; border: 1px solid; text-align: center; }
+.step-icon { font-size: 1.3rem; margin-bottom: 4px; }
+.step-title { font-size: 0.72rem; font-weight: 700; }
+.step-desc { font-size: 0.62rem; opacity: 0.55; margin-top: 2px; line-height: 1.4; }
+
+.chart-area { flex: 1; border-radius: 10px; border: 1px solid; padding: 12px 14px;
+              display: flex; align-items: flex-end; gap: 3px; overflow: hidden; position: relative; }
+.chart-title { position: absolute; top: 10px; left: 14px; font-size: 0.7rem; font-weight: 600; opacity: 0.7; }
+.bar { border-radius: 3px 3px 0 0; flex: 1; min-width: 18px; }
+.line-chart { position: absolute; bottom: 12px; left: 10px; right: 10px; top: 30px; }
+
+.btn-row { display: flex; gap: 8px; margin-top: 12px; }
+.btn { padding: 7px 16px; border-radius: 7px; font-size: 0.73rem; font-weight: 600;
+       border: none; cursor: pointer; }
+
+/* ══════════════════════════════════════════════════
+   THEME A — Deep Navy (Premium Analytics)
+══════════════════════════════════════════════════ */
+.a-wrap { background: #020817; }
+.a-label { background: #020817; color: #e2e8f0; border-bottom: 1px solid #1e293b; }
+.a-badge { background: #1e40af22; color: #60a5fa; border: 1px solid #1e40af; }
+
+.a-sidebar { background: #020817; border-right: 1px solid #0f172a; }
+.a-logo { color: #f1f5f9; }
+.a-nav-active { background: rgba(59,130,246,0.18); color: #93c5fd; border-left: 3px solid #3b82f6; }
+.a-nav { color: #64748b; }
+.a-nav:hover { background: rgba(255,255,255,0.04); color: #94a3b8; }
+.a-sep { background: #1e293b; }
+.a-exp { background: #0f172a; color: #64748b; }
+.a-exp b { color: #93c5fd; }
+.a-dot-on { background: #22c55e; } .a-dot-off { background: #334155; }
+
+.a-topbar { background: #020817; border-color: #0f172a; color: #64748b; }
+.a-content { background: #040f20; }
+.a-metric { background: #0a1628; border-color: #1e3a5f; color: #e2e8f0; }
+.a-metric-val { color: #60a5fa; }
+.a-step { background: #0a1628; border-color: #1e3a5f; color: #e2e8f0; }
+.a-step-icon-bg { }
+.a-chart { background: #0a1628; border-color: #1e3a5f; color: #64748b; }
+.a-btn-primary { background: linear-gradient(135deg, #1d4ed8, #0e7490); color: white; }
+.a-btn-secondary { background: #0f172a; color: #60a5fa; border: 1px solid #1e40af; }
+
+/* ══════════════════════════════════════════════════
+   THEME B — Arctic Lab (Clean Scientific)
+══════════════════════════════════════════════════ */
+.b-wrap { background: #f8fafc; }
+.b-label { background: #f8fafc; color: #0f172a; border-bottom: 1px solid #e2e8f0; }
+.b-badge { background: #ecfdf5; color: #059669; border: 1px solid #86efac; }
+
+.b-sidebar { background: #1e3a5f; }
+.b-logo { color: #f0f9ff; }
+.b-nav-active { background: rgba(14,165,233,0.25); color: #7dd3fc; border-left: 3px solid #0ea5e9; }
+.b-nav { color: #94a3b8; }
+.b-nav:hover { background: rgba(255,255,255,0.06); }
+.b-sep { background: #2d4f78; }
+.b-exp { background: rgba(255,255,255,0.06); color: #94a3b8; }
+.b-exp b { color: #7dd3fc; }
+.b-dot-on { background: #34d399; } .b-dot-off { background: #334155; }
+
+.b-topbar { background: white; border-color: #e2e8f0; color: #64748b; }
+.b-content { background: #f8fafc; }
+.b-metric { background: white; border-color: #e2e8f0; color: #0f172a;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.b-metric-val { color: #0369a1; }
+.b-step { background: white; border-color: #e2e8f0; color: #0f172a;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.b-chart { background: white; border-color: #e2e8f0; color: #64748b; }
+.b-btn-primary { background: linear-gradient(135deg, #0369a1, #059669); color: white; }
+.b-btn-secondary { background: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; }
+
+/* ══════════════════════════════════════════════════
+   THEME C — Forge (Industrial Dark + Amber)
+══════════════════════════════════════════════════ */
+.c-wrap { background: #0d1117; }
+.c-label { background: #0d1117; color: #e6edf3; border-bottom: 1px solid #21262d; }
+.c-badge { background: #7c2d1222; color: #fb923c; border: 1px solid #7c2d12; }
+
+.c-sidebar { background: #010409; border-right: 1px solid #21262d; }
+.c-logo { color: #e6edf3; }
+.c-nav-active { background: rgba(251,146,60,0.14); color: #fbbf24; border-left: 3px solid #f97316; }
+.c-nav { color: #7d8590; }
+.c-nav:hover { background: rgba(255,255,255,0.04); color: #adbac7; }
+.c-sep { background: #21262d; }
+.c-exp { background: #161b22; color: #7d8590; }
+.c-exp b { color: #fbbf24; }
+.c-dot-on { background: #22c55e; } .c-dot-off { background: #30363d; }
+
+.c-topbar { background: #0d1117; border-color: #21262d; color: #7d8590; }
+.c-content { background: #0d1117; }
+.c-metric { background: #161b22; border-color: #21262d; color: #e6edf3; }
+.c-metric-val { color: #f97316; }
+.c-step { background: #161b22; border-color: #21262d; color: #e6edf3; }
+.c-chart { background: #161b22; border-color: #21262d; color: #7d8590; }
+.c-btn-primary { background: linear-gradient(135deg, #ea580c, #b45309); color: white; }
+.c-btn-secondary { background: #161b22; color: #f97316; border: 1px solid #7c2d12; }
+
+/* ══════════════════════════════════════════════════
+   THEME D — Slate Pro (Modern SaaS / Violet)
+══════════════════════════════════════════════════ */
+.d-wrap { background: #f1f5f9; }
+.d-label { background: #f1f5f9; color: #0f172a; border-bottom: 1px solid #e2e8f0; }
+.d-badge { background: #ede9fe; color: #7c3aed; border: 1px solid #c4b5fd; }
+
+.d-sidebar { background: #1e1b4b; }
+.d-logo { color: #ede9fe; }
+.d-nav-active { background: rgba(139,92,246,0.28); color: #c4b5fd; border-left: 3px solid #8b5cf6; }
+.d-nav { color: #818cf8; }
+.d-nav:hover { background: rgba(255,255,255,0.06); color: #a5b4fc; }
+.d-sep { background: #312e81; }
+.d-exp { background: rgba(255,255,255,0.05); color: #818cf8; }
+.d-exp b { color: #c4b5fd; }
+.d-dot-on { background: #34d399; } .d-dot-off { background: #3730a3; }
+
+.d-topbar { background: white; border-color: #e2e8f0; color: #64748b; }
+.d-content { background: #f1f5f9; }
+.d-metric { background: white; border-color: #e2e8f0; color: #0f172a;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.d-metric-val { color: #7c3aed; }
+.d-step { background: white; border-color: #e2e8f0; color: #0f172a;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+.d-chart { background: white; border-color: #e2e8f0; color: #64748b; }
+.d-btn-primary { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; }
+.d-btn-secondary { background: #ede9fe; color: #7c3aed; border: 1px solid #c4b5fd; }
+
+/* chart bars */
+.bar-a1{background:#3b82f6;height:78%} .bar-a2{background:#0ea5e9;height:55%} .bar-a3{background:#38bdf8;height:90%}
+.bar-a4{background:#7dd3fc;height:62%} .bar-a5{background:#3b82f6;height:45%} .bar-a6{background:#0ea5e9;height:80%}
+
+.bar-b1{background:#0369a1;height:78%} .bar-b2{background:#059669;height:55%} .bar-b3{background:#0ea5e9;height:90%}
+.bar-b4{background:#34d399;height:62%} .bar-b5{background:#0369a1;height:45%} .bar-b6{background:#059669;height:80%}
+
+.bar-c1{background:#ea580c;height:78%} .bar-c2{background:#f97316;height:55%} .bar-c3{background:#fb923c;height:90%}
+.bar-c4{background:#fbbf24;height:62%} .bar-c5{background:#ea580c;height:45%} .bar-c6{background:#f97316;height:80%}
+
+.bar-d1{background:#7c3aed;height:78%} .bar-d2{background:#8b5cf6;height:55%} .bar-d3{background:#a78bfa;height:90%}
+.bar-d4{background:#c4b5fd;height:62%} .bar-d5{background:#7c3aed;height:45%} .bar-d6{background:#8b5cf6;height:80%}
+
+footer { text-align: center; margin-top: 40px; color: #4b5563; font-size: 0.82rem; }
+</style>
+</head>
+<body>
+
+<h1>🔬 FactorLab — Design Options</h1>
+<p class="subtitle">4 professional themes — pick the one that fits your vision</p>
+
+<div class="grid">
+
+  <!-- ─────────── THEME A ─────────── -->
+  <div class="theme-card">
+    <div class="theme-label a-label">
+      🌌 Option A — <b>Deep Navy</b>
+      <span class="badge a-badge">Premium Analytics</span>
+    </div>
+    <div class="app a-wrap">
+      <!-- sidebar -->
+      <div class="sidebar a-sidebar">
+        <div class="sidebar-logo a-logo">🔬 FactorLab <span>Design · Analyze · Optimize</span></div>
+        <div class="nav-item a-nav-active">🏠 Dashboard</div>
+        <div class="nav-item a-nav">🔬 Design Wizard</div>
+        <div class="nav-item a-nav">📊 Analysis</div>
+        <div class="nav-item a-nav">🎯 Optimization</div>
+        <div class="nav-item a-nav">📈 Visualization</div>
+        <div class="nav-item a-nav">🤖 AI Insights</div>
+        <hr class="nav-sep a-sep">
+        <div class="exp-badge a-exp">
+          <b>Pellet Optimization</b>
+          CCD · 3 factors · 2 resp.
+          <div style="margin-top:6px">
+            <span class="status-dot a-dot-on"></span>Design<br>
+            <span class="status-dot a-dot-on"></span>Models<br>
+            <span class="status-dot a-dot-off"></span>Optimized
+          </div>
+        </div>
+      </div>
+      <!-- main -->
+      <div class="main">
+        <div class="topbar a-topbar">FactorLab &nbsp;/&nbsp; Dashboard &nbsp;·&nbsp; Pellet Optimization</div>
+        <div class="content a-content">
+          <div class="metrics">
+            <div class="metric a-metric"><div class="metric-val a-metric-val">3</div><div class="metric-lab">Factors</div></div>
+            <div class="metric a-metric"><div class="metric-val a-metric-val">2</div><div class="metric-lab">Responses</div></div>
+            <div class="metric a-metric"><div class="metric-val a-metric-val">22</div><div class="metric-lab">Runs</div></div>
+            <div class="metric a-metric"><div class="metric-val a-metric-val">0.89</div><div class="metric-lab">R²</div></div>
+          </div>
+          <div class="section-title" style="color:#64748b">How it works</div>
+          <div class="steps">
+            <div class="step a-step"><div class="step-icon">🔬</div><div class="step-title">Design</div><div class="step-desc">Choose design type & factors</div></div>
+            <div class="step a-step"><div class="step-icon">📊</div><div class="step-title">Analysis</div><div class="step-desc">Fit MLR / PLS models</div></div>
+            <div class="step a-step"><div class="step-icon">🎯</div><div class="step-title">Optimize</div><div class="step-desc">Multi-response optimizer</div></div>
+          </div>
+          <div class="chart-area a-chart" style="height:90px">
+            <div class="chart-title">Model Coefficients</div>
+            <div class="bar bar-a3"></div><div class="bar bar-a1"></div>
+            <div class="bar bar-a6"></div><div class="bar bar-a2"></div>
+            <div class="bar bar-a4"></div><div class="bar bar-a5"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn a-btn-primary">🚀 New Experiment</button>
+            <button class="btn a-btn-secondary">📈 View Results</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── THEME B ─────────── -->
+  <div class="theme-card">
+    <div class="theme-label b-label">
+      🧊 Option B — <b>Arctic Lab</b>
+      <span class="badge b-badge">Clean Scientific</span>
+    </div>
+    <div class="app b-wrap">
+      <div class="sidebar b-sidebar">
+        <div class="sidebar-logo b-logo">🔬 FactorLab <span>Design · Analyze · Optimize</span></div>
+        <div class="nav-item b-nav-active">🏠 Dashboard</div>
+        <div class="nav-item b-nav">🔬 Design Wizard</div>
+        <div class="nav-item b-nav">📊 Analysis</div>
+        <div class="nav-item b-nav">🎯 Optimization</div>
+        <div class="nav-item b-nav">📈 Visualization</div>
+        <div class="nav-item b-nav">🤖 AI Insights</div>
+        <hr class="nav-sep b-sep">
+        <div class="exp-badge b-exp">
+          <b>Pellet Optimization</b>
+          CCD · 3 factors · 2 resp.
+          <div style="margin-top:6px">
+            <span class="status-dot b-dot-on"></span>Design<br>
+            <span class="status-dot b-dot-on"></span>Models<br>
+            <span class="status-dot b-dot-off"></span>Optimized
+          </div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="topbar b-topbar">FactorLab &nbsp;/&nbsp; Dashboard &nbsp;·&nbsp; Pellet Optimization</div>
+        <div class="content b-content">
+          <div class="metrics">
+            <div class="metric b-metric"><div class="metric-val b-metric-val">3</div><div class="metric-lab">Factors</div></div>
+            <div class="metric b-metric"><div class="metric-val b-metric-val">2</div><div class="metric-lab">Responses</div></div>
+            <div class="metric b-metric"><div class="metric-val b-metric-val">22</div><div class="metric-lab">Runs</div></div>
+            <div class="metric b-metric"><div class="metric-val b-metric-val">0.89</div><div class="metric-lab">R²</div></div>
+          </div>
+          <div class="section-title" style="color:#94a3b8">How it works</div>
+          <div class="steps">
+            <div class="step b-step"><div class="step-icon">🔬</div><div class="step-title">Design</div><div class="step-desc">Choose design type & factors</div></div>
+            <div class="step b-step"><div class="step-icon">📊</div><div class="step-title">Analysis</div><div class="step-desc">Fit MLR / PLS models</div></div>
+            <div class="step b-step"><div class="step-icon">🎯</div><div class="step-title">Optimize</div><div class="step-desc">Multi-response optimizer</div></div>
+          </div>
+          <div class="chart-area b-chart" style="height:90px">
+            <div class="chart-title">Model Coefficients</div>
+            <div class="bar bar-b3"></div><div class="bar bar-b1"></div>
+            <div class="bar bar-b6"></div><div class="bar bar-b2"></div>
+            <div class="bar bar-b4"></div><div class="bar bar-b5"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn b-btn-primary">🚀 New Experiment</button>
+            <button class="btn b-btn-secondary">📈 View Results</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── THEME C ─────────── -->
+  <div class="theme-card">
+    <div class="theme-label c-label">
+      🔥 Option C — <b>Forge</b>
+      <span class="badge c-badge">Industrial Dark</span>
+    </div>
+    <div class="app c-wrap">
+      <div class="sidebar c-sidebar">
+        <div class="sidebar-logo c-logo">🔬 FactorLab <span>Design · Analyze · Optimize</span></div>
+        <div class="nav-item c-nav-active">🏠 Dashboard</div>
+        <div class="nav-item c-nav">🔬 Design Wizard</div>
+        <div class="nav-item c-nav">📊 Analysis</div>
+        <div class="nav-item c-nav">🎯 Optimization</div>
+        <div class="nav-item c-nav">📈 Visualization</div>
+        <div class="nav-item c-nav">🤖 AI Insights</div>
+        <hr class="nav-sep c-sep">
+        <div class="exp-badge c-exp">
+          <b>Pellet Optimization</b>
+          CCD · 3 factors · 2 resp.
+          <div style="margin-top:6px">
+            <span class="status-dot c-dot-on"></span>Design<br>
+            <span class="status-dot c-dot-on"></span>Models<br>
+            <span class="status-dot c-dot-off"></span>Optimized
+          </div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="topbar c-topbar">FactorLab &nbsp;/&nbsp; Dashboard &nbsp;·&nbsp; Pellet Optimization</div>
+        <div class="content c-content">
+          <div class="metrics">
+            <div class="metric c-metric"><div class="metric-val c-metric-val">3</div><div class="metric-lab">Factors</div></div>
+            <div class="metric c-metric"><div class="metric-val c-metric-val">2</div><div class="metric-lab">Responses</div></div>
+            <div class="metric c-metric"><div class="metric-val c-metric-val">22</div><div class="metric-lab">Runs</div></div>
+            <div class="metric c-metric"><div class="metric-val c-metric-val">0.89</div><div class="metric-lab">R²</div></div>
+          </div>
+          <div class="section-title" style="color:#7d8590">How it works</div>
+          <div class="steps">
+            <div class="step c-step"><div class="step-icon">🔬</div><div class="step-title">Design</div><div class="step-desc">Choose design type & factors</div></div>
+            <div class="step c-step"><div class="step-icon">📊</div><div class="step-title">Analysis</div><div class="step-desc">Fit MLR / PLS models</div></div>
+            <div class="step c-step"><div class="step-icon">🎯</div><div class="step-title">Optimize</div><div class="step-desc">Multi-response optimizer</div></div>
+          </div>
+          <div class="chart-area c-chart" style="height:90px">
+            <div class="chart-title">Model Coefficients</div>
+            <div class="bar bar-c3"></div><div class="bar bar-c1"></div>
+            <div class="bar bar-c6"></div><div class="bar bar-c2"></div>
+            <div class="bar bar-c4"></div><div class="bar bar-c5"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn c-btn-primary">🚀 New Experiment</button>
+            <button class="btn c-btn-secondary">📈 View Results</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── THEME D ─────────── -->
+  <div class="theme-card">
+    <div class="theme-label d-label">
+      💜 Option D — <b>Slate Pro</b>
+      <span class="badge d-badge">Modern SaaS</span>
+    </div>
+    <div class="app d-wrap">
+      <div class="sidebar d-sidebar">
+        <div class="sidebar-logo d-logo">🔬 FactorLab <span>Design · Analyze · Optimize</span></div>
+        <div class="nav-item d-nav-active">🏠 Dashboard</div>
+        <div class="nav-item d-nav">🔬 Design Wizard</div>
+        <div class="nav-item d-nav">📊 Analysis</div>
+        <div class="nav-item d-nav">🎯 Optimization</div>
+        <div class="nav-item d-nav">📈 Visualization</div>
+        <div class="nav-item d-nav">🤖 AI Insights</div>
+        <hr class="nav-sep d-sep">
+        <div class="exp-badge d-exp">
+          <b>Pellet Optimization</b>
+          CCD · 3 factors · 2 resp.
+          <div style="margin-top:6px">
+            <span class="status-dot d-dot-on"></span>Design<br>
+            <span class="status-dot d-dot-on"></span>Models<br>
+            <span class="status-dot d-dot-off"></span>Optimized
+          </div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="topbar d-topbar">FactorLab &nbsp;/&nbsp; Dashboard &nbsp;·&nbsp; Pellet Optimization</div>
+        <div class="content d-content">
+          <div class="metrics">
+            <div class="metric d-metric"><div class="metric-val d-metric-val">3</div><div class="metric-lab">Factors</div></div>
+            <div class="metric d-metric"><div class="metric-val d-metric-val">2</div><div class="metric-lab">Responses</div></div>
+            <div class="metric d-metric"><div class="metric-val d-metric-val">22</div><div class="metric-lab">Runs</div></div>
+            <div class="metric d-metric"><div class="metric-val d-metric-val">0.89</div><div class="metric-lab">R²</div></div>
+          </div>
+          <div class="section-title" style="color:#94a3b8">How it works</div>
+          <div class="steps">
+            <div class="step d-step"><div class="step-icon">🔬</div><div class="step-title">Design</div><div class="step-desc">Choose design type & factors</div></div>
+            <div class="step d-step"><div class="step-icon">📊</div><div class="step-title">Analysis</div><div class="step-desc">Fit MLR / PLS models</div></div>
+            <div class="step d-step"><div class="step-icon">🎯</div><div class="step-title">Optimize</div><div class="step-desc">Multi-response optimizer</div></div>
+          </div>
+          <div class="chart-area d-chart" style="height:90px">
+            <div class="chart-title">Model Coefficients</div>
+            <div class="bar bar-d3"></div><div class="bar bar-d1"></div>
+            <div class="bar bar-d6"></div><div class="bar bar-d2"></div>
+            <div class="bar bar-d4"></div><div class="bar bar-d5"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn d-btn-primary">🚀 New Experiment</button>
+            <button class="btn d-btn-secondary">📈 View Results</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /grid -->
+
+<footer>
+  Hangi temayı seçerseniz söyleyin → hemen uyguluyoruz &nbsp;·&nbsp;
+  A = Deep Navy &nbsp; B = Arctic Lab &nbsp; C = Forge &nbsp; D = Slate Pro
+</footer>
+
+</body>
+</html>
