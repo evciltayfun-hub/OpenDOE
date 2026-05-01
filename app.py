@@ -22,317 +22,283 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── Custom CSS — Theme: Deep Navy (Option A) ────────────────────────────────
+# ─── Custom CSS — AQUIONIS-inspired Dark Theme ───────────────────────────────
 st.markdown("""
 <style>
-  /* ════════════════════════════════════════════════════
-     DEEP NAVY — Professional Dark
-     Background: #020817  |  Card: #0a1628
-     Accent:     #3b82f6  |  Green: #10b981
-     Text:       #f1f5f9  |  Muted: #64748b
-  ════════════════════════════════════════════════════ */
+  /* ══════════════════════════════════════════════
+     FACTORLAB — AQUIONIS-inspired Dark Theme
+     Page:    #0b0f14  |  Sidebar: #0d1117
+     Card:    #161b22  |  Border:  #21262d
+     Accent:  #00c9a7  |  Text:    #e6edf3
+  ══════════════════════════════════════════════ */
 
-  /* ── Hide Streamlit toolbar & footer ──────────────── */
-  [data-testid="stToolbar"]        { display: none !important; }
-  [data-testid="stDecoration"]     { display: none !important; }
-  [data-testid="stStatusWidget"]   { display: none !important; }
-  #MainMenu                        { display: none !important; }
-  footer                           { display: none !important; }
-  header[data-testid="stHeader"]   { display: none !important; }
-
-  /* ── Keep sidebar always open ──────────────────────── */
-  [data-testid="stSidebarCollapseButton"] { display: none !important; }
+  /* Hide Streamlit chrome */
+  [data-testid="stToolbar"],
+  [data-testid="stDecoration"],
+  [data-testid="stStatusWidget"],
+  #MainMenu, footer,
+  header[data-testid="stHeader"]          { display: none !important; }
+  [data-testid="stSidebarCollapseButton"],
   [data-testid="collapsedControl"]        { display: none !important; }
 
-  /* ── Page background ───────────────────────────────── */
-  .stApp { background-color: #020817; color: #f1f5f9; }
-  .block-container { background: transparent; }
+  /* Page */
+  .stApp                    { background: #0b0f14; color: #e6edf3; }
+  .block-container          { background: transparent; padding-top: 16px !important; }
 
-  /* ── Sidebar ───────────────────────────────────────── */
+  /* Sidebar */
   [data-testid="stSidebar"] {
-    background: #060f1e;
-    border-right: 1px solid #1e2d45;
+    background: #0d1117 !important;
+    border-right: 1px solid #21262d !important;
+    min-width: 220px !important;
   }
-  [data-testid="stSidebar"] * { color: #94a3b8 !important; }
-  [data-testid="stSidebar"] hr { border-color: #1e2d45 !important; }
+  [data-testid="stSidebar"] * { color: #7d8590 !important; }
+  [data-testid="stSidebar"] hr { border-color: #21262d !important; margin: 6px 0 !important; }
 
-  /* ── Nav items — hide Streamlit radio circles, show clean links ── */
-  [data-testid="stSidebar"] .stRadio > label { display: none; }
+  /* Sidebar section labels */
+  .sb-section {
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.2px !important;
+    text-transform: uppercase !important;
+    color: #444d56 !important;
+    padding: 10px 14px 4px 14px !important;
+    display: block !important;
+  }
 
-  /* Hide the actual radio input and the circular indicator div */
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] input[type="radio"] {
-    position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
-  }
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label > div:first-child {
-    display: none !important;
-  }
-
-  /* Style each nav option as a clean link row */
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] {
-    display: flex; flex-direction: column; gap: 1px;
-  }
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label {
-    display: flex !important;
-    align-items: center !important;
-    background: transparent;
-    border-radius: 4px;
-    padding: 8px 12px !important;
-    margin: 0 !important;
-    cursor: pointer;
-    transition: background 0.12s;
-    font-size: 0.85rem !important;
+  /* Sidebar nav buttons */
+  [data-testid="stSidebar"] .stButton > button {
+    background: transparent !important;
+    border: none !important;
     border-left: 2px solid transparent !important;
-    color: #4b5e78 !important;
-    line-height: 1.3 !important;
-  }
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label p {
-    font-size: 0.85rem !important;
-    color: inherit !important;
+    border-radius: 0 !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    padding: 7px 14px !important;
+    width: 100% !important;
+    font-size: 0.84rem !important;
+    font-weight: 400 !important;
+    color: #7d8590 !important;
+    transition: all 0.1s !important;
+    box-shadow: none !important;
     margin: 0 !important;
-    padding: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
   }
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label:hover {
-    background: rgba(59,130,246,0.08) !important;
-    color: #93c5fd !important;
-    border-left-color: #1e3a6e !important;
+  [data-testid="stSidebar"] .stButton > button:hover {
+    background: #161b22 !important;
+    color: #e6edf3 !important;
+    border-left-color: #30363d !important;
   }
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label:has(input:checked),
-  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label[data-checked="true"] {
-    background: rgba(59,130,246,0.12) !important;
-    border-left-color: #3b82f6 !important;
-    color: #93c5fd !important;
-  }
-
-  /* ── Streamlit default text override ──────────────── */
-  .stApp, .stApp p, .stApp span, .stApp div,
-  .stApp label, .stApp li, .stApp td, .stApp th {
-    color: #e2e8f0;
+  [data-testid="stSidebar"] .stButton > button[kind="primary"] {
+    background: #1c2128 !important;
+    border-left-color: #00c9a7 !important;
+    color: #e6edf3 !important;
+    font-weight: 500 !important;
   }
 
-  /* ── Metric cards ──────────────────────────────────── */
+  /* Metric cards */
   [data-testid="metric-container"] {
-    background: #0a1628;
-    border: 1px solid #1e2d45;
-    border-top: 2px solid #3b82f6;
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-top: 2px solid #00c9a7;
     border-radius: 6px;
     padding: 10px 14px;
-    box-shadow: none;
   }
   [data-testid="metric-container"] [data-testid="stMetricValue"] {
-    color: #60a5fa !important;
+    color: #00c9a7 !important;
     font-weight: 700;
     font-size: 1.5rem !important;
   }
   [data-testid="metric-container"] [data-testid="stMetricLabel"] {
-    color: #64748b !important;
-    font-size: 0.75rem !important;
+    color: #7d8590 !important;
+    font-size: 0.73rem !important;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
 
-  /* ── Section panels ────────────────────────────────── */
+  /* Panels */
   .fl-panel {
-    background: #0a1628;
-    border: 1px solid #1e2d45;
+    background: #161b22;
+    border: 1px solid #21262d;
     border-radius: 6px;
     padding: 14px 18px;
     margin-bottom: 12px;
   }
 
-  /* ── Step cards ────────────────────────────────────── */
-  .fl-step-card {
-    background: #0a1628;
-    border: 1px solid #1e2d45;
-    border-radius: 6px;
-    padding: 16px 14px 14px 14px;
-    text-align: center;
-    height: 100%;
-    transition: border-color 0.15s;
-  }
-  .fl-step-card:hover {
-    border-color: #3b82f6;
-  }
-  .fl-step-icon { font-size: 1.6rem; margin-bottom: 6px; }
-  .fl-step-num {
-    display: inline-block;
-    background: #1e3a6e;
-    border: 1px solid #3b82f6;
-    color: #60a5fa !important;
-    border-radius: 3px;
-    width: 22px; height: 22px; line-height: 22px;
-    font-size: 0.72rem; font-weight: 700; margin-bottom: 8px;
-  }
-  .fl-step-title { font-weight: 600; font-size: 0.88rem; color: #e2e8f0; margin-bottom: 5px; }
-  .fl-step-desc  { font-size: 0.78rem; color: #64748b; line-height: 1.45; }
-  .fl-arrow {
-    font-size: 1.2rem; color: #1e3a6e;
-    display: flex; align-items: center; justify-content: center;
-    height: 100%; padding-top: 36px;
-  }
-
-  /* ── Hero banner ───────────────────────────────────── */
-  .fl-hero {
-    background: linear-gradient(135deg, #0a1628 0%, #0f2040 60%, #0d1f3c 100%);
+  /* Workflow step cards */
+  .wf-card {
+    background: #161b22;
+    border: 1px solid #21262d;
     border-radius: 8px;
-    padding: 28px 36px;
-    color: white;
-    margin-bottom: 20px;
-    border: 1px solid #1e3a6e;
-    border-left: 3px solid #3b82f6;
+    padding: 18px 14px 16px;
+    height: 100%;
+    position: relative;
   }
-  .fl-hero h1 { color: #f1f5f9 !important; font-size: 1.9rem !important; margin: 0; font-weight: 700; }
-  .fl-hero p  { color: #60a5fa; margin: 6px 0 0 0; font-size: 0.9rem; letter-spacing: 0.3px; }
+  .wf-card.wf-active  { border-color: #00c9a7; }
+  .wf-card.wf-done    { border-color: #238636; }
+  .wf-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    font-size: 0.82rem; font-weight: 700; margin-bottom: 10px;
+  }
+  .wf-num.active  { background: #00c9a7; color: #0b0f14 !important; }
+  .wf-num.done    { background: #238636; color: #fff !important; }
+  .wf-num.locked  { background: #21262d; color: #444d56 !important; }
+  .wf-title       { font-size: 0.9rem; font-weight: 600; color: #e6edf3; margin-bottom: 5px; }
+  .wf-title.locked{ color: #444d56; }
+  .wf-desc        { font-size: 0.77rem; color: #7d8590; line-height: 1.45; }
+  .wf-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: #30363d; font-size: 1.1rem; padding-top: 30px;
+  }
+  .wf-action {
+    display: inline-block; margin-top: 10px;
+    font-size: 0.75rem; color: #00c9a7; font-weight: 500;
+  }
 
-  /* ── Feature badge ─────────────────────────────────── */
+  /* Hero */
+  .fl-hero {
+    background: #161b22;
+    border: 1px solid #21262d;
+    border-left: 3px solid #00c9a7;
+    border-radius: 8px;
+    padding: 22px 28px;
+    margin-bottom: 18px;
+  }
+  .fl-hero h1 { color: #e6edf3 !important; font-size: 1.6rem !important; margin: 0; font-weight: 700; }
+  .fl-hero p  { color: #7d8590; margin: 5px 0 0 0; font-size: 0.87rem; }
+
+  /* Badge */
   .fl-badge {
     display: inline-block;
-    background: #0f2040;
-    border: 1px solid #1e3a6e;
+    background: #1c2128;
+    border: 1px solid #30363d;
     border-radius: 3px;
-    padding: 2px 10px;
-    font-size: 0.75rem;
-    color: #60a5fa;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    color: #7d8590;
     font-weight: 500;
     margin: 2px 2px 2px 0;
   }
 
-  /* ── Compare table ─────────────────────────────────── */
-  .fl-compare td { padding: 6px 12px; font-size: 0.82rem; border-bottom: 1px solid #1e2d45; color: #cbd5e1; }
-  .fl-compare th { background: #0f1e35; padding: 7px 12px; font-size: 0.78rem;
-                   color: #60a5fa; font-weight: 600; border-bottom: 1px solid #1e3a6e; }
+  /* Compare table */
+  .fl-compare td { padding: 6px 12px; font-size: 0.8rem; border-bottom: 1px solid #21262d; color: #7d8590; }
+  .fl-compare th { background: #161b22; padding: 7px 12px; font-size: 0.75rem;
+                   color: #7d8590; font-weight: 600; border-bottom: 1px solid #21262d;
+                   text-transform: uppercase; letter-spacing: 0.5px; }
 
-  /* ── Primary button ────────────────────────────────── */
+  /* Buttons (main area) */
   .stButton > button[kind="primary"] {
-    background: #1d4ed8;
-    border: 1px solid #3b82f6;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: #f1f5f9 !important;
-    transition: all 0.15s;
+    background: #00c9a7 !important;
+    border: 1px solid #00c9a7 !important;
+    border-radius: 5px !important;
+    font-weight: 600 !important;
+    font-size: 0.84rem !important;
+    color: #0b0f14 !important;
   }
   .stButton > button[kind="primary"]:hover {
-    background: #2563eb;
-    border-color: #60a5fa;
+    background: #00b396 !important;
+    border-color: #00b396 !important;
   }
-  /* Secondary / default button */
   .stButton > button:not([kind="primary"]) {
-    border: 1px solid #1e2d45 !important;
-    color: #94a3b8 !important;
-    background: #0a1628 !important;
-    border-radius: 5px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    border: 1px solid #21262d !important;
+    color: #7d8590 !important;
+    background: #161b22 !important;
+    border-radius: 5px !important;
+    font-size: 0.84rem !important;
   }
   .stButton > button:not([kind="primary"]):hover {
-    background: #0f1e35 !important;
-    border-color: #3b82f6 !important;
-    color: #60a5fa !important;
+    border-color: #00c9a7 !important;
+    color: #e6edf3 !important;
+  }
+  /* Disabled buttons in sidebar should not get main area styling */
+  [data-testid="stSidebar"] .stButton > button[kind="primary"] {
+    color: #e6edf3 !important;
+    background: #1c2128 !important;
+    border-left-color: #00c9a7 !important;
   }
 
-  /* ── Tabs ──────────────────────────────────────────── */
+  /* Tabs */
   .stTabs [data-baseweb="tab-list"] {
-    gap: 2px; background: #060f1e; border-radius: 5px; padding: 3px;
-    border: 1px solid #1e2d45;
+    gap: 1px; background: #0d1117; border-radius: 5px; padding: 3px;
+    border: 1px solid #21262d;
   }
   .stTabs [data-baseweb="tab"] {
     border-radius: 4px; padding: 6px 16px;
-    color: #64748b !important; font-weight: 500; font-size: 0.85rem;
+    color: #7d8590 !important; font-weight: 400; font-size: 0.83rem;
   }
   .stTabs [aria-selected="true"] {
-    background: #0a1628;
-    color: #60a5fa !important;
-    font-weight: 600;
+    background: #161b22 !important;
+    color: #e6edf3 !important;
+    font-weight: 600 !important;
   }
 
-  /* ── Expanders ─────────────────────────────────────── */
+  /* Expanders */
   [data-testid="stExpander"] {
-    border: 1px solid #1e2d45 !important;
+    border: 1px solid #21262d !important;
     border-radius: 5px !important;
-    background: #0a1628;
+    background: #161b22 !important;
   }
-  [data-testid="stExpander"] summary {
-    color: #94a3b8 !important;
-    font-size: 0.87rem !important;
-  }
+  [data-testid="stExpander"] summary { color: #7d8590 !important; font-size: 0.84rem !important; }
 
-  /* ── Data tables ───────────────────────────────────── */
-  [data-testid="stDataFrame"] {
-    border: 1px solid #1e2d45;
-    border-radius: 5px;
-  }
+  /* Data tables */
+  [data-testid="stDataFrame"] { border: 1px solid #21262d; border-radius: 5px; }
 
-  /* ── Progress & sliders ────────────────────────────── */
-  [data-testid="stProgress"] > div > div {
-    background: #3b82f6 !important;
-  }
+  /* Progress */
+  [data-testid="stProgress"] > div > div { background: #00c9a7 !important; }
 
-  /* ── Alerts ────────────────────────────────────────── */
-  .stAlert { border-radius: 5px; font-size: 0.85rem; }
-  [data-testid="stNotification"][kind="success"],
-  div[data-testid="stMarkdownContainer"] .stSuccess {
-    background: #052e16 !important;
-    border-left: 3px solid #10b981 !important;
-    color: #6ee7b7 !important;
-  }
-  [data-testid="stNotification"][kind="info"],
-  div[data-testid="stMarkdownContainer"] .stInfo {
-    background: #0f172a !important;
-    border-left: 3px solid #3b82f6 !important;
-    color: #93c5fd !important;
-  }
-
-  /* ── Typography ─────────────────────────────────────── */
-  h1 { color: #f1f5f9 !important; font-weight: 700; font-size: 1.6rem !important; }
-  h2 { color: #e2e8f0 !important; font-weight: 600; font-size: 1.3rem !important; }
-  h3 { color: #cbd5e1 !important; font-weight: 600; font-size: 1.1rem !important; }
-  h4 { color: #94a3b8 !important; font-weight: 600; font-size: 0.95rem !important;
+  /* Typography */
+  h1 { color: #e6edf3 !important; font-weight: 700; font-size: 1.4rem !important; }
+  h2 { color: #e6edf3 !important; font-weight: 600; font-size: 1.15rem !important; }
+  h3 { color: #c9d1d9 !important; font-weight: 600; font-size: 1.0rem !important; }
+  h4 { color: #7d8590 !important; font-weight: 600; font-size: 0.82rem !important;
        text-transform: uppercase; letter-spacing: 0.5px; }
-  hr { border-color: #1e2d45 !important; margin: 14px 0; }
-  p  { font-size: 0.88rem; color: #cbd5e1; }
+  hr { border-color: #21262d !important; margin: 12px 0; }
+  p  { font-size: 0.86rem; color: #c9d1d9; }
 
-  /* ── Input fields ──────────────────────────────────── */
+  /* Inputs */
   [data-testid="stTextInput"] > div > div > input,
   [data-testid="stNumberInput"] > div > div > input {
-    background: #060f1e !important;
+    background: #0d1117 !important;
     border-radius: 4px !important;
-    border: 1px solid #1e2d45 !important;
-    color: #e2e8f0 !important;
-    font-size: 0.87rem !important;
+    border: 1px solid #30363d !important;
+    color: #e6edf3 !important;
+    font-size: 0.86rem !important;
   }
   [data-testid="stTextInput"] > div > div > input:focus,
   [data-testid="stNumberInput"] > div > div > input:focus {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 2px rgba(59,130,246,0.15) !important;
+    border-color: #00c9a7 !important;
+    box-shadow: 0 0 0 2px rgba(0,201,167,0.12) !important;
   }
   [data-testid="stSelectbox"] > div > div {
-    background: #060f1e !important;
+    background: #0d1117 !important;
     border-radius: 4px !important;
-    border: 1px solid #1e2d45 !important;
-    color: #e2e8f0 !important;
-    font-size: 0.87rem !important;
+    border: 1px solid #30363d !important;
+    color: #e6edf3 !important;
+    font-size: 0.86rem !important;
   }
   [data-testid="stTextArea"] textarea {
-    background: #060f1e !important;
-    border: 1px solid #1e2d45 !important;
-    color: #e2e8f0 !important;
-    font-size: 0.87rem !important;
+    background: #0d1117 !important;
+    border: 1px solid #30363d !important;
+    color: #e6edf3 !important;
+    font-size: 0.86rem !important;
     border-radius: 4px !important;
   }
-  /* Selectbox / dropdown popover */
-  [data-baseweb="select"] * { color: #e2e8f0 !important; }
-  [data-baseweb="popover"] { background: #0f1e35 !important; border: 1px solid #1e2d45 !important; }
-  [data-baseweb="option"]:hover { background: #1e3a6e !important; }
+  [data-baseweb="select"] * { color: #e6edf3 !important; }
+  [data-baseweb="popover"]  { background: #161b22 !important; border: 1px solid #21262d !important; }
+  [data-baseweb="option"]:hover { background: #1c2128 !important; }
 
-  /* Labels */
+  /* Widget labels */
   [data-testid="stWidgetLabel"] p,
-  label[data-testid] p { font-size: 0.82rem !important; color: #64748b !important; font-weight: 500; }
+  label[data-testid] p { font-size: 0.8rem !important; color: #7d8590 !important; font-weight: 500; }
 
-  /* ── Divider ───────────────────────────────────────── */
-  .fl-divider {
-    height: 1px;
-    background: linear-gradient(90deg, #3b82f6, transparent);
-    margin: 16px 0;
+  /* Alerts */
+  .stAlert { border-radius: 5px; font-size: 0.84rem; }
+
+  /* Page header breadcrumb */
+  .fl-breadcrumb {
+    font-size: 0.75rem; color: #444d56; text-transform: uppercase;
+    letter-spacing: 1px; font-weight: 600; margin-bottom: 6px;
   }
 </style>
 """, unsafe_allow_html=True)
@@ -361,74 +327,67 @@ _init_state()
 
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
+    # Logo
     st.markdown(f"""
-    <div style="padding:16px 6px 10px 6px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <div style="background:#0f2040; border:1px solid #1e3a6e;
-                        border-radius:5px; width:36px; height:36px;
-                        display:flex; align-items:center; justify-content:center;
-                        font-size:1.2rem; flex-shrink:0;">🔬</div>
-            <div>
-                <div style="font-size:1.2rem; font-weight:700; letter-spacing:-0.3px; color:#f1f5f9;">
-                    {APP_NAME}
-                </div>
-                <div style="font-size:0.62rem; color:#3b82f6; letter-spacing:1.5px;
-                            text-transform:uppercase; font-weight:500; margin-top:1px;">
-                    {APP_TAGLINE}
-                </div>
-            </div>
+    <div style="padding:16px 14px 10px 14px; border-bottom:1px solid #21262d;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="background:#1c2128; border:1px solid #21262d; border-left:2px solid #00c9a7;
+                    border-radius:5px; width:32px; height:32px;
+                    display:flex; align-items:center; justify-content:center; font-size:1.1rem;">🔬</div>
+        <div>
+          <div style="font-size:1.05rem; font-weight:700; color:#e6edf3; letter-spacing:-0.2px;">{APP_NAME}</div>
+          <div style="font-size:0.6rem; color:#00c9a7; letter-spacing:1.5px; text-transform:uppercase; font-weight:500;">{APP_TAGLINE}</div>
         </div>
+      </div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.divider()
+    current_page = st.session_state.get("page", "🏠 Dashboard")
 
-    pages = [
-        "🏠 Dashboard",
-        "🔬 Design Wizard",
-        "📊 Analysis",
-        "🎯 Optimization",
-        "📈 Visualization",
-        "🤖 AI Insights",
-        "📤 Export",
-    ]
-    page = st.radio("Navigation", pages,
-                    index=pages.index(st.session_state.get("page", "🏠 Dashboard")))
-    st.session_state.page = page
+    def _nav_btn(label, page_key, icon=""):
+        is_active = current_page == page_key
+        btn_type = "primary" if is_active else "secondary"
+        if st.button(f"{icon} {label}" if icon else label,
+                     key=f"nav_{page_key}", use_container_width=True, type=btn_type):
+            st.session_state.page = page_key
+            st.rerun()
 
-    # Experiment status panel
+    st.markdown('<span class="sb-section">MAIN</span>', unsafe_allow_html=True)
+    _nav_btn("Dashboard",    "🏠 Dashboard",    "⊞")
+
+    st.markdown('<span class="sb-section">WORKFLOW</span>', unsafe_allow_html=True)
+    _nav_btn("Design Wizard","🔬 Design Wizard","①")
+    _nav_btn("Analysis",     "📊 Analysis",     "②")
+    _nav_btn("Optimization", "🎯 Optimization", "③")
+    _nav_btn("Visualization","📈 Visualization","④")
+
+    st.markdown('<span class="sb-section">TOOLS</span>', unsafe_allow_html=True)
+    _nav_btn("AI Insights",  "🤖 AI Insights",  "◈")
+    _nav_btn("Export",       "📤 Export",        "↓")
+
+    # Experiment status
     exp = st.session_state.experiment
     if exp.get("name"):
-        st.divider()
-        n_f = len(exp.get("factors", []))
-        n_r = len(exp.get("responses", []))
+        st.markdown('<div style="border-top:1px solid #21262d; padding:10px 14px 0 14px; margin-top:8px;">', unsafe_allow_html=True)
         has_design = exp.get("design_matrix") is not None
         has_data   = exp.get("response_data") is not None
         has_models = bool(st.session_state.get("models"))
         has_opt    = bool(st.session_state.get("optimization"))
-
         st.markdown(f"""
-        <div style="font-size:0.8rem; color:#94a3b8; line-height:1.5;">
-          <b style="color:#e2e8f0; font-size:0.87rem;">{exp['name']}</b><br>
-          <span style="color:#3b82f6; font-size:0.78rem;">{exp.get('design_type_name', '—')}</span><br>
-          <span style="font-size:0.76rem;">{n_f} factors &nbsp;·&nbsp; {n_r} responses</span>
+        <div style="font-size:0.78rem; line-height:1.6;">
+          <div style="color:#e6edf3; font-weight:600; font-size:0.82rem; margin-bottom:2px;
+                      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{exp['name']}</div>
+          <div style="color:#00c9a7; font-size:0.73rem; margin-bottom:6px;">{exp.get('design_type_name','—')}</div>
+          {"".join(f'<div style="color:{"#238636" if done else "#30363d"}; font-size:0.75rem;">{"●" if done else "○"} {label}</div>'
+                   for label, done in [("Design",has_design),("Data",has_data),("Models",has_models),("Optimized",has_opt)])}
         </div>
         """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown("<div style='margin-top:8px;'>", unsafe_allow_html=True)
-        steps = [("Design", has_design), ("Data", has_data),
-                 ("Models", has_models), ("Optimized", has_opt)]
-        for label, done in steps:
-            icon  = "●" if done else "○"
-            color = "#10b981" if done else "#334155"
-            st.markdown(f"<span style='color:{color}; font-size:0.78rem;'>{icon} {label}</span>",
-                        unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    st.divider()
-    st.markdown(f"<span style='color:#334155; font-size:0.72rem;'>v{APP_VERSION} &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; Free Forever</span>",
-                unsafe_allow_html=True)
-    if st.button("🗑️ New Experiment", use_container_width=True):
+    st.markdown('<div style="border-top:1px solid #21262d; padding:10px 14px; margin-top:auto;">', unsafe_allow_html=True)
+    st.markdown(f'<span style="color:#444d56; font-size:0.7rem;">v{APP_VERSION} · Open Source · Free</span>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    if st.button("⊘ New Experiment", use_container_width=True):
         for k in ["experiment", "models", "optimization", "ai_history", "wizard_step"]:
             if k in st.session_state:
                 del st.session_state[k]
@@ -504,14 +463,13 @@ def _render_welcome():
     st.markdown(f"""
     <div class="fl-hero">
         <h1>🔬 {APP_NAME}</h1>
-        <p>{APP_TAGLINE} — Professional Design of Experiments, free and open source.</p>
+        <p>{APP_TAGLINE} — Professional Design of Experiments platform, free and open source.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    # CTA buttons
-    c1, c2, c3 = st.columns([2, 2, 2])
+    c1, c2, _, _ = st.columns([1.4, 1.4, 1, 1])
     with c1:
-        if st.button("🚀 Start New Experiment", type="primary", use_container_width=True):
+        if st.button("→ Start New Experiment", type="primary", use_container_width=True):
             st.session_state.page = "🔬 Design Wizard"
             st.rerun()
     with c2:
@@ -521,107 +479,102 @@ def _render_welcome():
 
     st.markdown("---")
 
-    # How It Works — Step Cards
-    st.markdown("### How It Works")
-    st.markdown("Follow the 6-step workflow to go from raw factors to optimized process conditions.")
-
-    steps = [
-        ("🔬", "1", "Design Wizard",
-         "Define factors & responses. Choose a design type (CCD, Factorial, BBD…). Download your experiment template."),
-        ("🧪", "2", "Run Experiments",
-         "Perform the experimental runs in the lab or plant. Fill in measured response values."),
-        ("📊", "3", "Model Analysis",
-         "Upload data. Fit MLR or PLS models. Review R², Q², ANOVA tables and coefficient plots."),
-        ("🎯", "4", "Optimization",
-         "Set goals (maximize / minimize / target) for each response. Run multi-objective optimizer."),
-        ("📈", "5", "Visualization",
-         "Explore 3D response surfaces, contour maps, sweet spot plots and interaction charts."),
-        ("🤖", "6", "AI Insights",
-         "Claude analyzes your results and delivers a plain-language expert interpretation."),
+    # Workflow cards — AQUIONIS style
+    st.markdown("#### Workflow")
+    steps_data = [
+        ("Design Wizard",  "Define factors & responses. Choose a design type (CCD, Factorial…). Download your experiment template.", "→ Start here", "🔬 Design Wizard"),
+        ("Run Experiments","Perform the experimental runs in the lab or plant. Fill in measured response values.", None, None),
+        ("Analysis",       "Upload data. Fit MLR or PLS models. Review R², Q², ANOVA and coefficient plots.", None, "📊 Analysis"),
+        ("Optimization",   "Set goals (maximize / minimize / target). Run multi-objective optimizer.", None, "🎯 Optimization"),
+        ("Visualization",  "Explore 3D response surfaces, contour maps, sweet spot and interaction charts.", None, "📈 Visualization"),
+        ("AI Insights",    "Claude analyzes your results and delivers a plain-language expert interpretation.", None, "🤖 AI Insights"),
     ]
 
-    # Row 1
-    cols = st.columns([1, 0.18, 1, 0.18, 1])
-    for i, col_idx in enumerate([0, 2, 4]):
-        s = steps[i]
-        with cols[col_idx]:
+    # Row 1: steps 1-3
+    cols = st.columns([1, 0.12, 1, 0.12, 1])
+    for idx, col_i in enumerate([0, 2, 4]):
+        i = idx
+        s = steps_data[i]
+        num_cls = "active" if i == 0 else "locked"
+        card_cls = "wf-card wf-active" if i == 0 else "wf-card"
+        action_html = f'<span class="wf-action">{s[2]}</span>' if s[2] else ""
+        title_cls = "wf-title" if i == 0 else "wf-title locked"
+        with cols[col_i]:
             st.markdown(f"""
-            <div class="fl-step-card">
-                <div class="fl-step-num">{s[1]}</div><br>
-                <div class="fl-step-icon">{s[0]}</div>
-                <div class="fl-step-title">{s[2]}</div>
-                <div class="fl-step-desc">{s[3]}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        if col_idx in [0, 2]:
-            with cols[col_idx + 1]:
-                st.markdown('<div class="fl-arrow">→</div>', unsafe_allow_html=True)
+            <div class="{card_cls}">
+              <div class="wf-num {num_cls}">{i+1}</div>
+              <div class="{title_cls}">{s[0]}</div>
+              <div class="wf-desc">{s[1]}</div>
+              {action_html}
+            </div>""", unsafe_allow_html=True)
+        if col_i in [0, 2]:
+            with cols[col_i + 1]:
+                st.markdown('<div class="wf-arrow">›</div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # Row 2
-    cols2 = st.columns([1, 0.18, 1, 0.18, 1])
-    for i, col_idx in enumerate([0, 2, 4]):
-        s = steps[i + 3]
-        with cols2[col_idx]:
+    # Row 2: steps 4-6
+    cols2 = st.columns([1, 0.12, 1, 0.12, 1])
+    for idx, col_i in enumerate([0, 2, 4]):
+        i = idx + 3
+        s = steps_data[i]
+        num_cls = "locked"
+        with cols2[col_i]:
             st.markdown(f"""
-            <div class="fl-step-card">
-                <div class="fl-step-num">{s[1]}</div><br>
-                <div class="fl-step-icon">{s[0]}</div>
-                <div class="fl-step-title">{s[2]}</div>
-                <div class="fl-step-desc">{s[3]}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        if col_idx in [0, 2]:
-            with cols2[col_idx + 1]:
-                st.markdown('<div class="fl-arrow">→</div>', unsafe_allow_html=True)
+            <div class="wf-card">
+              <div class="wf-num {num_cls}">{i+1}</div>
+              <div class="wf-title locked">{s[0]}</div>
+              <div class="wf-desc">{s[1]}</div>
+            </div>""", unsafe_allow_html=True)
+        if col_i in [0, 2]:
+            with cols2[col_i + 1]:
+                st.markdown('<div class="wf-arrow">›</div>', unsafe_allow_html=True)
 
     st.markdown("---")
 
-    # Feature / comparison section
+    # Feature / comparison
     col_feat, col_cmp = st.columns([3, 2])
 
     with col_feat:
-        st.markdown("### Design Types Supported")
+        st.markdown("#### Design Types")
         design_info = [
-            ("🔲", "Full Factorial (2^k)", "2–6 factors", "All factor combinations. Complete information."),
-            ("📐", "Fractional Factorial", "3–15 factors", "Efficient screening; some interactions aliased."),
-            ("🎯", "Plackett-Burman", "2–23 factors", "Maximum screening power, minimum runs."),
-            ("⭕", "Central Composite (CCD)", "2–8 factors", "Gold standard for response surface modeling."),
-            ("🔷", "Box-Behnken (BBD)", "3–7 factors", "No corner points — ideal for constrained ranges."),
+            ("2^k", "Full Factorial", "2–6 factors", "All factor combinations. Complete information."),
+            ("½", "Fractional Factorial", "3–15 factors", "Efficient screening; some interactions aliased."),
+            ("PB", "Plackett-Burman", "2–23 factors", "Maximum screening power, minimum runs."),
+            ("◎", "Central Composite (CCD)", "2–8 factors", "Gold standard for response surface modeling."),
+            ("◇", "Box-Behnken (BBD)", "3–7 factors", "No corner points — ideal for constrained ranges."),
         ]
-        for icon, name, factors, desc in design_info:
+        for sym, name, factors, desc in design_info:
             st.markdown(f"""
-            <div style="display:flex; align-items:flex-start; gap:10px; padding:8px 0;
-                        border-bottom:1px solid #1e2d45;">
-                <span style="font-size:1.1rem; margin-top:2px; opacity:0.8;">{icon}</span>
-                <div>
-                    <b style="font-size:0.85rem; color:#e2e8f0;">{name}</b>
-                    <span style="color:#3b82f6; font-size:0.78rem; margin-left:8px;">{factors}</span><br>
-                    <span style="color:#64748b; font-size:0.78rem;">{desc}</span>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+            <div style="display:flex; align-items:flex-start; gap:10px; padding:7px 0; border-bottom:1px solid #21262d;">
+              <div style="background:#1c2128; border:1px solid #21262d; border-radius:4px;
+                          width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+                          font-size:0.72rem; font-weight:700; color:#00c9a7; flex-shrink:0;">{sym}</div>
+              <div>
+                <b style="font-size:0.84rem; color:#e6edf3;">{name}</b>
+                <span style="color:#00c9a7; font-size:0.75rem; margin-left:8px;">{factors}</span><br>
+                <span style="color:#7d8590; font-size:0.76rem;">{desc}</span>
+              </div>
+            </div>""", unsafe_allow_html=True)
 
     with col_cmp:
-        st.markdown("### FactorLab vs MODDE")
+        st.markdown("#### FactorLab vs MODDE")
         st.markdown("""
-<table class="fl-compare" style="width:100%; border-collapse:collapse; border-radius:5px; overflow:hidden; border:1px solid #1e2d45; background:#0a1628;">
+<table class="fl-compare" style="width:100%; border-collapse:collapse; border:1px solid #21262d; border-radius:6px; overflow:hidden; background:#161b22;">
 <tr><th>Feature</th><th>FactorLab</th><th>MODDE</th></tr>
-<tr><td>Price</td><td style="color:#10b981;">✓ Free</td><td style="color:#64748b;">€3,000+/yr</td></tr>
-<tr><td>Platform</td><td style="color:#10b981;">✓ Web</td><td style="color:#64748b;">Windows only</td></tr>
-<tr><td>AI Interpretation</td><td style="color:#10b981;">✓ Claude AI</td><td style="color:#64748b;">—</td></tr>
-<tr><td>Open Source</td><td style="color:#10b981;">✓ GitHub</td><td style="color:#64748b;">—</td></tr>
-<tr><td>MLR / PLS</td><td style="color:#10b981;">✓</td><td style="color:#60a5fa;">✓</td></tr>
-<tr><td>Response Surface</td><td style="color:#10b981;">✓ Interactive</td><td style="color:#60a5fa;">✓ Static</td></tr>
-<tr><td>Sweet Spot Plot</td><td style="color:#10b981;">✓ + Zone Box</td><td style="color:#60a5fa;">✓</td></tr>
-<tr><td>Collaboration</td><td style="color:#10b981;">✓ Multi-user</td><td style="color:#64748b;">—</td></tr>
-</table>
-""", unsafe_allow_html=True)
+<tr><td>Price</td><td style="color:#238636;">✓ Free</td><td style="color:#444d56;">€3,000+/yr</td></tr>
+<tr><td>Platform</td><td style="color:#238636;">✓ Web</td><td style="color:#444d56;">Windows only</td></tr>
+<tr><td>AI Insights</td><td style="color:#238636;">✓ Claude AI</td><td style="color:#444d56;">—</td></tr>
+<tr><td>Open Source</td><td style="color:#238636;">✓ GitHub</td><td style="color:#444d56;">—</td></tr>
+<tr><td>MLR / PLS</td><td style="color:#238636;">✓</td><td style="color:#00c9a7;">✓</td></tr>
+<tr><td>3D Surface</td><td style="color:#238636;">✓ Interactive</td><td style="color:#00c9a7;">✓ Static</td></tr>
+<tr><td>Sweet Spot</td><td style="color:#238636;">✓ + Zone Box</td><td style="color:#00c9a7;">✓</td></tr>
+<tr><td>Collaboration</td><td style="color:#238636;">✓ Multi-user</td><td style="color:#444d56;">—</td></tr>
+</table>""", unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("**Supported output formats:**")
-        for badge in ["Excel (.xlsx)", "CSV", "Markdown (AI Report)", "Plotly Interactive"]:
+        st.markdown("**Export formats:**")
+        for badge in ["Excel (.xlsx)", "CSV", "Plotly Interactive"]:
             st.markdown(f'<span class="fl-badge">{badge}</span>', unsafe_allow_html=True)
 
 
@@ -631,10 +584,10 @@ def _render_experiment_dashboard(exp):
     has_opt    = bool(st.session_state.get("optimization"))
 
     st.markdown(f"""
-    <div style="background:#0a1628; border:1px solid #1e2d45; border-left:3px solid #3b82f6;
+    <div style="background:#161b22; border:1px solid #21262d; border-left:3px solid #00c9a7;
                 border-radius:6px; padding:14px 20px; margin-bottom:16px;">
-        <div style="font-size:1.1rem; font-weight:700; color:#f1f5f9;">🔬 {exp['name']}</div>
-        <div style="color:#60a5fa; font-size:0.8rem; margin-top:4px;">
+        <div style="font-size:1.1rem; font-weight:700; color:#e6edf3;">🔬 {exp['name']}</div>
+        <div style="color:#00c9a7; font-size:0.8rem; margin-top:4px;">
             {exp.get('design_type_name','—')} &nbsp;·&nbsp;
             {len(exp.get('factors',[]))} factors &nbsp;·&nbsp;
             {len(exp.get('responses',[]))} responses
@@ -662,21 +615,19 @@ def _render_experiment_dashboard(exp):
         with pcols[i]:
             if done:
                 st.markdown(f"""
-                <div style="border:1px solid #134e30; border-top:2px solid #10b981;
-                            border-radius:5px; padding:10px 12px; text-align:center;
-                            background:#052e16;">
-                    <div style="font-size:1.0rem;">●</div>
-                    <div style="font-weight:600; font-size:0.8rem; color:#6ee7b7; margin-top:3px;">
+                <div style="background:#0d1117; border:1px solid #21262d; border-top:2px solid #238636;
+                            border-radius:5px; padding:10px 12px; text-align:center;">
+                    <div style="font-size:1.0rem; color:#3fb950;">●</div>
+                    <div style="font-weight:600; font-size:0.8rem; color:#3fb950; margin-top:3px;">
                         {label}</div>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown(f"""
-                <div style="border:1px solid #1e2d45; border-top:2px solid #1e3a6e;
-                            border-radius:5px; padding:10px 12px; text-align:center;
-                            background:#0a1628;">
-                    <div style="font-size:1.0rem; color:#334155;">○</div>
-                    <div style="font-weight:500; font-size:0.8rem; color:#475569; margin-top:3px;">
+                <div style="background:#161b22; border:1px solid #21262d; border-top:2px solid #30363d;
+                            border-radius:5px; padding:10px 12px; text-align:center;">
+                    <div style="font-size:1.0rem; color:#7d8590;">○</div>
+                    <div style="font-weight:500; font-size:0.8rem; color:#7d8590; margin-top:3px;">
                         {label}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -706,16 +657,16 @@ def _render_experiment_dashboard(exp):
         st.markdown("#### Optimization Result")
         c1, c2 = st.columns([1, 2])
         with c1:
-            d_color = "#059669" if d > 0.7 else ("#f59e0b" if d > 0.4 else "#ef4444")
-            d_label = "🟢 Excellent (≥ 0.7)" if d >= 0.7 else ("🟡 Acceptable (≥ 0.4)" if d >= 0.4 else "🔴 Low — review limits")
+            d_color = "#00c9a7" if d > 0.7 else ("#f59e0b" if d > 0.4 else "#ef4444")
+            d_label = "Excellent (≥ 0.7)" if d >= 0.7 else ("Acceptable (≥ 0.4)" if d >= 0.4 else "Low — review limits")
             st.markdown(f"""
             <div style="text-align:center; padding:18px 14px;
-                        background:#0a1628; border-radius:6px;
-                        border:1px solid #1e2d45; border-top:2px solid {d_color};">
+                        background:#161b22; border-radius:6px;
+                        border:1px solid #21262d; border-top:2px solid {d_color};">
                 <div style="font-size:2.4rem; font-weight:800; color:{d_color}; line-height:1;">{d:.2f}</div>
                 <div style="font-size:0.72rem; font-weight:600; color:{d_color}; text-transform:uppercase;
                             letter-spacing:1px; margin-top:5px;">Overall Desirability</div>
-                <div style="font-size:0.72rem; color:#64748b; margin-top:6px;">{d_label}</div>
+                <div style="font-size:0.72rem; color:#7d8590; margin-top:6px;">{d_label}</div>
             </div>
             """, unsafe_allow_html=True)
         with c2:
