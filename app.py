@@ -40,6 +40,10 @@ st.markdown("""
   footer                           { display: none !important; }
   header[data-testid="stHeader"]   { display: none !important; }
 
+  /* ── Keep sidebar always open ──────────────────────── */
+  [data-testid="stSidebarCollapseButton"] { display: none !important; }
+  [data-testid="collapsedControl"]        { display: none !important; }
+
   /* ── Page background ───────────────────────────────── */
   .stApp { background-color: #020817; color: #f1f5f9; }
   .block-container { background: transparent; }
