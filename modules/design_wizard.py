@@ -125,33 +125,33 @@ def render_design_wizard():
     if "wizard_step" not in st.session_state:
         st.session_state.wizard_step = 1
 
-    # Step indicator — Arctic Lab style
+    # Step indicator — Deep Navy style
     current = st.session_state.wizard_step
     parts = []
     for i, label in enumerate(STEPS, 1):
         if i < current:
-            bg, border, fg, num_bg = "#f0fdf4", "#a7f3d0", "#065f46", "#059669"
+            bg, border, fg, num_bg, num_color = "#052e16", "#134e30", "#6ee7b7", "#10b981", "white"
             icon = "✓"
         elif i == current:
-            bg, border, fg, num_bg = "#f0f9ff", "#7dd3fc", "#0369a1", "#0891b2"
+            bg, border, fg, num_bg, num_color = "#0f2040", "#1e3a6e", "#93c5fd", "#1d4ed8", "#f1f5f9"
             icon = str(i)
         else:
-            bg, border, fg, num_bg = "#f8fafc", "#e2e8f0", "#94a3b8", "#cbd5e1"
+            bg, border, fg, num_bg, num_color = "#0a1628", "#1e2d45", "#475569", "#1e2d45", "#475569"
             icon = str(i)
         parts.append(f"""
-        <div style="background:{bg}; border:1px solid {border}; border-radius:10px;
-                    padding:10px 8px; text-align:center; flex:1; min-width:0;">
-            <span style="background:{num_bg}; color:white; border-radius:50%;
-                         width:22px; height:22px; display:inline-flex; align-items:center;
-                         justify-content:center; font-size:0.72rem; font-weight:800;
+        <div style="background:{bg}; border:1px solid {border}; border-radius:5px;
+                    padding:8px 6px; text-align:center; flex:1; min-width:0;">
+            <span style="background:{num_bg}; color:{num_color}; border-radius:3px;
+                         width:20px; height:20px; display:inline-flex; align-items:center;
+                         justify-content:center; font-size:0.70rem; font-weight:700;
                          margin-bottom:4px;">{icon}</span>
-            <div style="font-size:0.76rem; font-weight:600; color:{fg};
+            <div style="font-size:0.73rem; font-weight:600; color:{fg};
                         white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{label}</div>
         </div>
         """)
-    connector = '<div style="color:#bae6fd; font-size:1rem; padding-top:14px; flex-shrink:0;">›</div>'
+    connector = '<div style="color:#1e3a6e; font-size:0.9rem; padding-top:12px; flex-shrink:0;">›</div>'
     joined = connector.join(parts)
-    st.markdown(f'<div style="display:flex; gap:6px; align-items:flex-start; margin-bottom:20px;">{joined}</div>',
+    st.markdown(f'<div style="display:flex; gap:4px; align-items:flex-start; margin-bottom:16px;">{joined}</div>',
                 unsafe_allow_html=True)
 
     step = st.session_state.wizard_step
@@ -407,16 +407,17 @@ def _step_select_design():
         col = cols[idx % len(cols)]
         with col:
             run_count = get_run_count(dinfo["key"], n_factors)
-            border = "2px solid #1e40af" if dname == selected else "1px solid #e5e7eb"
-            bg = "#eff6ff" if dname == selected else "#ffffff"
-            rec_badge = " ⭐" if dname in recommended else ""
+            border = "1px solid #3b82f6" if dname == selected else "1px solid #1e2d45"
+            bg = "#0f2040" if dname == selected else "#0a1628"
+            rec_badge = " ★" if dname in recommended else ""
+            title_color = "#93c5fd" if dname == selected else "#e2e8f0"
             st.markdown(f"""
-            <div style="border:{border}; border-radius:8px; padding:14px; background:{bg};
-                        margin-bottom:8px; cursor:pointer;">
-                <b>{dinfo['icon']} {dname}{rec_badge}</b><br>
-                <span style="color:#6b7280; font-size:0.85em;">{dinfo['type']}</span><br>
-                <span style="font-size:0.9em;">🔢 <b>{run_count}</b> runs</span><br>
-                <span style="font-size:0.85em; color:#374151;">{dinfo['description']}</span>
+            <div style="border:{border}; border-radius:5px; padding:11px 12px; background:{bg};
+                        margin-bottom:6px;">
+                <b style="color:{title_color}; font-size:0.87rem;">{dinfo['icon']} {dname}{rec_badge}</b><br>
+                <span style="color:#3b82f6; font-size:0.78em;">{dinfo['type']}</span><br>
+                <span style="font-size:0.82em; color:#60a5fa;">⬡ <b>{run_count}</b> runs</span><br>
+                <span style="font-size:0.78em; color:#64748b;">{dinfo['description']}</span>
             </div>
             """, unsafe_allow_html=True)
             if st.button(f"Select", key=f"sel_{dname}", use_container_width=True):

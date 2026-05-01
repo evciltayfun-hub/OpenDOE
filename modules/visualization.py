@@ -11,7 +11,7 @@ from plotly.subplots import make_subplots
 from utils.stats import predict_response
 from utils.doe_engine import coded_to_natural
 
-PLOTLY_TEMPLATE = "plotly_white"
+PLOTLY_TEMPLATE = "plotly_dark"
 # MODDE-style: blue-cyan-green-yellow-orange-red
 MODDE_COLORSCALE = [
     [0.00, "#1a3c8f"],
@@ -158,24 +158,26 @@ def _tab_surface(exp):
     fig.update_layout(
         template=PLOTLY_TEMPLATE, height=580,
         scene=dict(
-            xaxis=dict(title=xlab, backgroundcolor="#f8fafc"),
-            yaxis=dict(title=ylab, backgroundcolor="#f8fafc"),
-            zaxis=dict(title=rname, backgroundcolor="#f0f9ff"),
+            xaxis=dict(title=xlab, backgroundcolor="#0a1628", gridcolor="#1e2d45"),
+            yaxis=dict(title=ylab, backgroundcolor="#0a1628", gridcolor="#1e2d45"),
+            zaxis=dict(title=rname, backgroundcolor="#060f1e", gridcolor="#1e2d45"),
             camera=dict(eye=dict(x=1.6, y=1.6, z=1.1)),
         ),
         margin=dict(l=0, r=0, t=30, b=0),
-        title=dict(text=f"Response Surface — {rname}", font=dict(size=15, color="#0f172a")),
+        paper_bgcolor="#020817",
+        title=dict(text=f"Response Surface — {rname}", font=dict(size=14, color="#e2e8f0")),
     )
     st.plotly_chart(fig, use_container_width=True)
 
     # MODDE-style info box
     zmin, zmax = float(zz.min()), float(zz.max())
     st.markdown(f"""
-    <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px;
-                padding:12px 18px; font-size:0.85rem; color:#0c4a6e; margin-top:-8px;">
-        📊 &nbsp;<b>{rname}</b> range on this surface:
-        &nbsp;Min = <b>{zmin:.3f}</b> &nbsp;|&nbsp; Max = <b>{zmax:.3f}</b>
-        &nbsp;|&nbsp; Range = <b>{zmax-zmin:.3f}</b>
+    <div style="background:#0a1628; border:1px solid #1e2d45; border-radius:5px;
+                padding:10px 16px; font-size:0.82rem; color:#94a3b8; margin-top:-8px;">
+        ◈ &nbsp;<b style="color:#e2e8f0;">{rname}</b> range on this surface:
+        &nbsp;Min = <b style="color:#60a5fa;">{zmin:.3f}</b>
+        &nbsp;|&nbsp; Max = <b style="color:#60a5fa;">{zmax:.3f}</b>
+        &nbsp;|&nbsp; Range = <b style="color:#60a5fa;">{zmax-zmin:.3f}</b>
     </div>
     """, unsafe_allow_html=True)
 
@@ -275,7 +277,8 @@ def _tab_contour(exp):
         fig.update_layout(
             template=PLOTLY_TEMPLATE,
             height=400 * n_rows,
-            title=dict(text="Contour Plots", font=dict(size=15)),
+            paper_bgcolor="#020817",
+            title=dict(text="Contour Plots", font=dict(size=14, color="#e2e8f0")),
         )
         for row in range(1, n_rows + 1):
             for col in range(1, n_cols + 1):
@@ -315,14 +318,14 @@ def _tab_contour(exp):
         fig.add_trace(go.Contour(
             x=x_nat, y=y_nat, z=overall,
             colorscale=[
-                [0.0,  "#f0f4f8"], [0.3,  "#fde68a"],
-                [0.6,  "#34d399"], [0.8,  "#059669"],
-                [1.0,  "#065f46"],
+                [0.0,  "#0f172a"], [0.3,  "#1e3a6e"],
+                [0.6,  "#1d6f4f"], [0.8,  "#10b981"],
+                [1.0,  "#6ee7b7"],
             ],
             zmin=0, zmax=1,
             contours=dict(
                 showlabels=True,
-                labelfont=dict(size=10, color="#0f172a"),
+                labelfont=dict(size=10, color="#f1f5f9"),
                 start=0, end=1, size=0.1,
             ),
             colorbar=dict(title="Desirability", thickness=18),
@@ -346,10 +349,10 @@ def _tab_contour(exp):
         if xf in opt_nat and yf in opt_nat:
             fig.add_trace(go.Scatter(
                 x=[opt_nat[xf]], y=[opt_nat[yf]], mode="markers+text",
-                marker=dict(color="white", size=16, symbol="star",
-                            line=dict(color="#1e40af", width=2.5)),
+                marker=dict(color="#f1f5f9", size=16, symbol="star",
+                            line=dict(color="#3b82f6", width=2.5)),
                 text=["Optimum"], textposition="top center",
-                textfont=dict(color="#1e40af", size=11, family="Arial Black"),
+                textfont=dict(color="#93c5fd", size=11, family="Arial Black"),
                 name="Optimum",
             ))
 
@@ -358,9 +361,10 @@ def _tab_contour(exp):
         fig.update_layout(
             template=PLOTLY_TEMPLATE, height=520,
             xaxis_title=xlab, yaxis_title=ylab,
+            paper_bgcolor="#020817",
             title=dict(text="Sweet Spot — Overall Desirability Map",
-                       font=dict(size=15, color="#0f172a")),
-            legend=dict(orientation="h", y=-0.12),
+                       font=dict(size=14, color="#e2e8f0")),
+            legend=dict(orientation="h", y=-0.12, font=dict(color="#94a3b8")),
         )
         st.plotly_chart(fig, use_container_width=True)
 
@@ -415,14 +419,16 @@ def _tab_main_effects(exp):
                         subplot_titles=[f"{fn} (Δ={v['delta']:.3f})" for fn, v in sorted_factors],
                         vertical_spacing=0.12, horizontal_spacing=0.1)
 
-    colors = px.colors.qualitative.Set2
+    line_colors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#a855f7", "#0ea5e9"]
+    fill_colors = ["rgba(59,130,246,0.10)", "rgba(16,185,129,0.10)", "rgba(245,158,11,0.10)",
+                   "rgba(239,68,68,0.10)", "rgba(168,85,247,0.10)", "rgba(14,165,233,0.10)"]
     for idx, (fname, v) in enumerate(sorted_factors):
         r, c = divmod(idx, n_cols)
         unit_label = f" ({v['unit']})" if v["unit"] else ""
         fig.add_trace(go.Scatter(
             x=v["nat"], y=v["pred"], mode="lines",
-            line=dict(color=colors[idx % len(colors)], width=2.5),
-            fill="tozeroy", fillcolor=f"rgba({','.join(str(int(c, 16)) for c in [colors[idx % len(colors)][1:3], colors[idx % len(colors)][3:5], colors[idx % len(colors)][5:7]])},0.08)",
+            line=dict(color=line_colors[idx % len(line_colors)], width=2.5),
+            fill="tozeroy", fillcolor=fill_colors[idx % len(fill_colors)],
             hovertemplate=f"{fname}: %{{x:.3g}}{unit_label}<br>{rname}: %{{y:.4f}}<extra></extra>",
             showlegend=False,
         ), row=r + 1, col=c + 1)
@@ -434,7 +440,8 @@ def _tab_main_effects(exp):
     fig.update_layout(
         template=PLOTLY_TEMPLATE,
         height=300 * n_rows,
-        title=dict(text=f"Main Effects on {rname}", font=dict(size=15)),
+        paper_bgcolor="#020817",
+        title=dict(text=f"Main Effects on {rname}", font=dict(size=14, color="#e2e8f0")),
     )
     for row in range(1, n_rows + 1):
         for col in range(1, n_cols + 1):
@@ -457,8 +464,9 @@ def _tab_main_effects(exp):
         textposition="outside",
     ))
     fig2.update_layout(template=PLOTLY_TEMPLATE, height=max(250, 50 * len(eff_df)),
+                       paper_bgcolor="#020817",
                        xaxis_title=f"Effect Size (max−min of {rname})",
-                       title="Factors sorted by absolute effect")
+                       title=dict(text="Factors sorted by absolute effect", font=dict(color="#e2e8f0")))
     st.plotly_chart(fig2, use_container_width=True)
 
 
@@ -497,7 +505,7 @@ def _tab_interactions(exp):
     nat_levels = [yfac["low"] + (l + 1) / 2 * (yfac["high"] - yfac["low"]) for l in levels]
     labels     = [f"{yf} = {v:.3g}" + (f" {yfac['unit']}" if yfac.get("unit") else "")
                   for v in nat_levels]
-    colors     = ["#1e3a8a", "#2563eb", "#0ea5e9", "#10b981", "#f59e0b"]
+    colors     = ["#60a5fa", "#3b82f6", "#0ea5e9", "#10b981", "#f59e0b"]
 
     fig = go.Figure()
     for level, label, color in zip(levels, labels, colors):
@@ -515,10 +523,11 @@ def _tab_interactions(exp):
         template=PLOTLY_TEMPLATE, height=440,
         xaxis_title=xlab, yaxis_title=rname,
         legend_title=yf,
+        paper_bgcolor="#020817",
         title=dict(text=f"Interaction: {xf} × {yf}  →  {rname}",
-                   font=dict(size=15, color="#0f172a")),
-        legend=dict(bgcolor="rgba(255,255,255,0.9)",
-                    bordercolor="#e2e8f0", borderwidth=1),
+                   font=dict(size=14, color="#e2e8f0")),
+        legend=dict(bgcolor="rgba(10,22,40,0.9)",
+                    bordercolor="#1e2d45", borderwidth=1, font=dict(color="#94a3b8")),
     )
     st.plotly_chart(fig, use_container_width=True)
 

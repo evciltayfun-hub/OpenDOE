@@ -22,248 +22,305 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── Custom CSS — Theme: Arctic Lab (Option B) ────────────────────────────────
+# ─── Custom CSS — Theme: Deep Navy (Option A) ────────────────────────────────
 st.markdown("""
 <style>
   /* ════════════════════════════════════════════════════
-     ARCTIC LAB — Clean Scientific
-     Sidebar: #1e3a5f navy  |  Content: white / #f8fafc
-     Accent:  #0891b2 teal  |  Secondary: #059669 green
+     DEEP NAVY — Professional Dark
+     Background: #020817  |  Card: #0a1628
+     Accent:     #3b82f6  |  Green: #10b981
+     Text:       #f1f5f9  |  Muted: #64748b
   ════════════════════════════════════════════════════ */
 
   /* ── Page background ───────────────────────────────── */
-  .stApp { background-color: #f0f5fa; }
+  .stApp { background-color: #020817; color: #f1f5f9; }
   .block-container { background: transparent; }
 
   /* ── Sidebar ───────────────────────────────────────── */
   [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #132b4a 0%, #1a3a5c 55%, #1e4474 100%);
-    border-right: 1px solid #14324f;
+    background: #060f1e;
+    border-right: 1px solid #1e2d45;
   }
-  [data-testid="stSidebar"] * { color: #cfe2f0 !important; }
-  [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.10) !important; }
+  [data-testid="stSidebar"] * { color: #94a3b8 !important; }
+  [data-testid="stSidebar"] hr { border-color: #1e2d45 !important; }
 
-  /* Nav items */
+  /* ── Nav items — hide Streamlit radio circles, show clean links ── */
   [data-testid="stSidebar"] .stRadio > label { display: none; }
-  [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
-    background: transparent;
-    border-radius: 8px;
-    padding: 9px 14px;
-    margin-bottom: 2px;
-    display: block;
-    transition: background 0.15s;
-    font-size: 0.92rem;
-    border-left: 3px solid transparent;
-    color: #a8c4d8 !important;
+
+  /* Hide the actual radio input and the circular indicator div */
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] input[type="radio"] {
+    position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
   }
-  [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-    background: rgba(14,165,233,0.12);
-    color: #7dd3fc !important;
-  }
-  [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label[data-checked="true"] {
-    background: rgba(14,165,233,0.18);
-    border-left: 3px solid #0ea5e9;
-    color: #7dd3fc !important;
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label > div:first-child {
+    display: none !important;
   }
 
-  /* ── Main content card wrapper ─────────────────────── */
-  [data-testid="stMainBlockContainer"] > div > div > div {
+  /* Style each nav option as a clean link row */
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] {
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label {
+    display: flex !important;
+    align-items: center !important;
     background: transparent;
+    border-radius: 4px;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+    cursor: pointer;
+    transition: background 0.12s;
+    font-size: 0.85rem !important;
+    border-left: 2px solid transparent !important;
+    color: #4b5e78 !important;
+    line-height: 1.3 !important;
+  }
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label p {
+    font-size: 0.85rem !important;
+    color: inherit !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label:hover {
+    background: rgba(59,130,246,0.08) !important;
+    color: #93c5fd !important;
+    border-left-color: #1e3a6e !important;
+  }
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label:has(input:checked),
+  [data-testid="stSidebar"] .stRadio [role="radiogroup"] label[data-checked="true"] {
+    background: rgba(59,130,246,0.12) !important;
+    border-left-color: #3b82f6 !important;
+    color: #93c5fd !important;
+  }
+
+  /* ── Streamlit default text override ──────────────── */
+  .stApp, .stApp p, .stApp span, .stApp div,
+  .stApp label, .stApp li, .stApp td, .stApp th {
+    color: #e2e8f0;
   }
 
   /* ── Metric cards ──────────────────────────────────── */
   [data-testid="metric-container"] {
-    background: white;
-    border: 1px solid #dce8f2;
-    border-top: 3px solid #0891b2;
-    border-radius: 10px;
-    padding: 14px 18px;
-    box-shadow: 0 1px 6px rgba(8,145,178,0.07);
+    background: #0a1628;
+    border: 1px solid #1e2d45;
+    border-top: 2px solid #3b82f6;
+    border-radius: 6px;
+    padding: 10px 14px;
+    box-shadow: none;
   }
   [data-testid="metric-container"] [data-testid="stMetricValue"] {
-    color: #0369a1 !important;
-    font-weight: 800;
+    color: #60a5fa !important;
+    font-weight: 700;
+    font-size: 1.5rem !important;
+  }
+  [data-testid="metric-container"] [data-testid="stMetricLabel"] {
+    color: #64748b !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
   /* ── Section panels ────────────────────────────────── */
   .fl-panel {
-    background: white;
-    border: 1px solid #dce8f2;
-    border-radius: 12px;
-    padding: 20px 24px;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
-    margin-bottom: 16px;
+    background: #0a1628;
+    border: 1px solid #1e2d45;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
   }
 
   /* ── Step cards ────────────────────────────────────── */
   .fl-step-card {
-    background: white;
-    border: 1px solid #dce8f2;
-    border-radius: 14px;
-    padding: 24px 18px 20px 18px;
+    background: #0a1628;
+    border: 1px solid #1e2d45;
+    border-radius: 6px;
+    padding: 16px 14px 14px 14px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(8,145,178,0.06);
     height: 100%;
-    transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    transition: border-color 0.15s;
   }
   .fl-step-card:hover {
-    box-shadow: 0 8px 24px rgba(8,145,178,0.15);
-    border-color: #7dd3fc;
-    transform: translateY(-3px);
+    border-color: #3b82f6;
   }
-  .fl-step-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .fl-step-icon { font-size: 1.6rem; margin-bottom: 6px; }
   .fl-step-num {
     display: inline-block;
-    background: linear-gradient(135deg, #0369a1, #0891b2);
-    color: white !important;
-    border-radius: 50%;
-    width: 28px; height: 28px; line-height: 28px;
-    font-size: 0.78rem; font-weight: 800; margin-bottom: 10px;
+    background: #1e3a6e;
+    border: 1px solid #3b82f6;
+    color: #60a5fa !important;
+    border-radius: 3px;
+    width: 22px; height: 22px; line-height: 22px;
+    font-size: 0.72rem; font-weight: 700; margin-bottom: 8px;
   }
-  .fl-step-title { font-weight: 700; font-size: 1.0rem; color: #0c2d4e; margin-bottom: 6px; }
-  .fl-step-desc  { font-size: 0.82rem; color: #64748b; line-height: 1.5; }
+  .fl-step-title { font-weight: 600; font-size: 0.88rem; color: #e2e8f0; margin-bottom: 5px; }
+  .fl-step-desc  { font-size: 0.78rem; color: #64748b; line-height: 1.45; }
   .fl-arrow {
-    font-size: 1.6rem; color: #bae6fd;
+    font-size: 1.2rem; color: #1e3a6e;
     display: flex; align-items: center; justify-content: center;
-    height: 100%; padding-top: 40px;
+    height: 100%; padding-top: 36px;
   }
 
   /* ── Hero banner ───────────────────────────────────── */
   .fl-hero {
-    background: linear-gradient(135deg, #0c2d4e 0%, #1e3a5f 45%, #0c6e8a 100%);
-    border-radius: 16px;
-    padding: 38px 44px;
+    background: linear-gradient(135deg, #0a1628 0%, #0f2040 60%, #0d1f3c 100%);
+    border-radius: 8px;
+    padding: 28px 36px;
     color: white;
-    margin-bottom: 28px;
-    border: 1px solid #1e4d6b;
-    box-shadow: 0 4px 24px rgba(12,45,78,0.25);
+    margin-bottom: 20px;
+    border: 1px solid #1e3a6e;
+    border-left: 3px solid #3b82f6;
   }
-  .fl-hero h1 { color: #f0f9ff !important; font-size: 2.5rem !important; margin: 0; font-weight: 800; }
-  .fl-hero p  { color: #7dd3fc; margin: 10px 0 0 0; font-size: 1.05rem; letter-spacing: 0.2px; }
+  .fl-hero h1 { color: #f1f5f9 !important; font-size: 1.9rem !important; margin: 0; font-weight: 700; }
+  .fl-hero p  { color: #60a5fa; margin: 6px 0 0 0; font-size: 0.9rem; letter-spacing: 0.3px; }
 
   /* ── Feature badge ─────────────────────────────────── */
   .fl-badge {
     display: inline-block;
-    background: #e0f7fa;
-    border: 1px solid #b2ebf2;
-    border-radius: 20px;
-    padding: 3px 12px;
-    font-size: 0.78rem;
-    color: #006064;
-    font-weight: 600;
-    margin: 3px 3px 3px 0;
+    background: #0f2040;
+    border: 1px solid #1e3a6e;
+    border-radius: 3px;
+    padding: 2px 10px;
+    font-size: 0.75rem;
+    color: #60a5fa;
+    font-weight: 500;
+    margin: 2px 2px 2px 0;
   }
 
   /* ── Compare table ─────────────────────────────────── */
-  .fl-compare td { padding: 7px 14px; font-size: 0.87rem; border-bottom: 1px solid #f1f5f9; }
-  .fl-compare th { background: #f0f9ff; padding: 9px 14px; font-size: 0.82rem;
-                   color: #0369a1; font-weight: 700; border-bottom: 2px solid #bae6fd; }
+  .fl-compare td { padding: 6px 12px; font-size: 0.82rem; border-bottom: 1px solid #1e2d45; color: #cbd5e1; }
+  .fl-compare th { background: #0f1e35; padding: 7px 12px; font-size: 0.78rem;
+                   color: #60a5fa; font-weight: 600; border-bottom: 1px solid #1e3a6e; }
 
   /* ── Primary button ────────────────────────────────── */
   .stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #0369a1 0%, #0891b2 60%, #059669 100%);
-    border: none; border-radius: 8px; font-weight: 600;
-    color: white !important;
-    box-shadow: 0 2px 8px rgba(8,145,178,0.3);
-    transition: all 0.2s;
+    background: #1d4ed8;
+    border: 1px solid #3b82f6;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #f1f5f9 !important;
+    transition: all 0.15s;
   }
   .stButton > button[kind="primary"]:hover {
-    background: linear-gradient(135deg, #0284c7 0%, #06b6d4 60%, #10b981 100%);
-    box-shadow: 0 4px 14px rgba(8,145,178,0.4);
-    transform: translateY(-1px);
+    background: #2563eb;
+    border-color: #60a5fa;
   }
   /* Secondary / default button */
   .stButton > button:not([kind="primary"]) {
-    border: 1px solid #bae6fd !important;
-    color: #0369a1 !important;
-    background: white !important;
-    border-radius: 8px;
+    border: 1px solid #1e2d45 !important;
+    color: #94a3b8 !important;
+    background: #0a1628 !important;
+    border-radius: 5px;
+    font-size: 0.85rem;
     font-weight: 500;
   }
   .stButton > button:not([kind="primary"]):hover {
-    background: #f0f9ff !important;
-    border-color: #0891b2 !important;
+    background: #0f1e35 !important;
+    border-color: #3b82f6 !important;
+    color: #60a5fa !important;
   }
 
   /* ── Tabs ──────────────────────────────────────────── */
   .stTabs [data-baseweb="tab-list"] {
-    gap: 4px; background: #e8f4fb; border-radius: 10px; padding: 4px;
-    border: 1px solid #c8e3f0;
+    gap: 2px; background: #060f1e; border-radius: 5px; padding: 3px;
+    border: 1px solid #1e2d45;
   }
   .stTabs [data-baseweb="tab"] {
-    border-radius: 8px; padding: 8px 20px;
-    color: #5b8fa8 !important; font-weight: 500;
+    border-radius: 4px; padding: 6px 16px;
+    color: #64748b !important; font-weight: 500; font-size: 0.85rem;
   }
   .stTabs [aria-selected="true"] {
-    background: white;
-    box-shadow: 0 1px 6px rgba(8,145,178,0.12);
-    color: #0369a1 !important;
-    font-weight: 700;
+    background: #0a1628;
+    color: #60a5fa !important;
+    font-weight: 600;
   }
 
   /* ── Expanders ─────────────────────────────────────── */
   [data-testid="stExpander"] {
-    border: 1px solid #dce8f2 !important;
-    border-radius: 10px !important;
-    background: white;
+    border: 1px solid #1e2d45 !important;
+    border-radius: 5px !important;
+    background: #0a1628;
+  }
+  [data-testid="stExpander"] summary {
+    color: #94a3b8 !important;
+    font-size: 0.87rem !important;
   }
 
   /* ── Data tables ───────────────────────────────────── */
   [data-testid="stDataFrame"] {
-    border: 1px solid #dce8f2;
-    border-radius: 8px;
-    overflow: hidden;
+    border: 1px solid #1e2d45;
+    border-radius: 5px;
   }
 
   /* ── Progress & sliders ────────────────────────────── */
   [data-testid="stProgress"] > div > div {
-    background: linear-gradient(90deg, #0891b2, #059669) !important;
+    background: #3b82f6 !important;
   }
 
   /* ── Alerts ────────────────────────────────────────── */
-  .stAlert { border-radius: 10px; }
-  .stSuccess {
-    background: #f0fdf4 !important;
-    border-left: 4px solid #059669 !important;
-    color: #14532d !important;
+  .stAlert { border-radius: 5px; font-size: 0.85rem; }
+  [data-testid="stNotification"][kind="success"],
+  div[data-testid="stMarkdownContainer"] .stSuccess {
+    background: #052e16 !important;
+    border-left: 3px solid #10b981 !important;
+    color: #6ee7b7 !important;
   }
-  .stInfo {
-    background: #f0f9ff !important;
-    border-left: 4px solid #0891b2 !important;
-    color: #0c4a6e !important;
-  }
-  .stWarning {
-    background: #fffbeb !important;
-    border-left: 4px solid #f59e0b !important;
+  [data-testid="stNotification"][kind="info"],
+  div[data-testid="stMarkdownContainer"] .stInfo {
+    background: #0f172a !important;
+    border-left: 3px solid #3b82f6 !important;
+    color: #93c5fd !important;
   }
 
   /* ── Typography ─────────────────────────────────────── */
-  h1 { color: #0c2d4e !important; font-weight: 800; }
-  h2 { color: #0c4a6e !important; font-weight: 700; }
-  h3 { color: #075985 !important; font-weight: 600; }
-  hr { border-color: #dce8f2 !important; margin: 20px 0; }
+  h1 { color: #f1f5f9 !important; font-weight: 700; font-size: 1.6rem !important; }
+  h2 { color: #e2e8f0 !important; font-weight: 600; font-size: 1.3rem !important; }
+  h3 { color: #cbd5e1 !important; font-weight: 600; font-size: 1.1rem !important; }
+  h4 { color: #94a3b8 !important; font-weight: 600; font-size: 0.95rem !important;
+       text-transform: uppercase; letter-spacing: 0.5px; }
+  hr { border-color: #1e2d45 !important; margin: 14px 0; }
+  p  { font-size: 0.88rem; color: #cbd5e1; }
 
   /* ── Input fields ──────────────────────────────────── */
   [data-testid="stTextInput"] > div > div > input,
   [data-testid="stNumberInput"] > div > div > input {
-    border-radius: 7px !important;
-    border: 1px solid #c8e3f0 !important;
+    background: #060f1e !important;
+    border-radius: 4px !important;
+    border: 1px solid #1e2d45 !important;
+    color: #e2e8f0 !important;
+    font-size: 0.87rem !important;
   }
   [data-testid="stTextInput"] > div > div > input:focus,
   [data-testid="stNumberInput"] > div > div > input:focus {
-    border-color: #0891b2 !important;
-    box-shadow: 0 0 0 3px rgba(8,145,178,0.12) !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 2px rgba(59,130,246,0.15) !important;
   }
   [data-testid="stSelectbox"] > div > div {
-    border-radius: 7px !important;
-    border: 1px solid #c8e3f0 !important;
+    background: #060f1e !important;
+    border-radius: 4px !important;
+    border: 1px solid #1e2d45 !important;
+    color: #e2e8f0 !important;
+    font-size: 0.87rem !important;
   }
+  [data-testid="stTextArea"] textarea {
+    background: #060f1e !important;
+    border: 1px solid #1e2d45 !important;
+    color: #e2e8f0 !important;
+    font-size: 0.87rem !important;
+    border-radius: 4px !important;
+  }
+  /* Selectbox / dropdown popover */
+  [data-baseweb="select"] * { color: #e2e8f0 !important; }
+  [data-baseweb="popover"] { background: #0f1e35 !important; border: 1px solid #1e2d45 !important; }
+  [data-baseweb="option"]:hover { background: #1e3a6e !important; }
+
+  /* Labels */
+  [data-testid="stWidgetLabel"] p,
+  label[data-testid] p { font-size: 0.82rem !important; color: #64748b !important; font-weight: 500; }
 
   /* ── Divider ───────────────────────────────────────── */
   .fl-divider {
-    height: 2px;
-    background: linear-gradient(90deg, #0891b2, #059669, transparent);
-    border-radius: 2px; margin: 24px 0;
+    height: 1px;
+    background: linear-gradient(90deg, #3b82f6, transparent);
+    margin: 16px 0;
   }
 </style>
 """, unsafe_allow_html=True)
@@ -293,17 +350,17 @@ _init_state()
 # ─── Sidebar ──────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown(f"""
-    <div style="padding: 20px 6px 12px 6px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <div style="background:linear-gradient(135deg,#0891b2,#059669);
-                        border-radius:10px; width:42px; height:42px;
+    <div style="padding:16px 6px 10px 6px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <div style="background:#0f2040; border:1px solid #1e3a6e;
+                        border-radius:5px; width:36px; height:36px;
                         display:flex; align-items:center; justify-content:center;
-                        font-size:1.4rem; flex-shrink:0;">🔬</div>
+                        font-size:1.2rem; flex-shrink:0;">🔬</div>
             <div>
-                <div style="font-size:1.4rem; font-weight:800; letter-spacing:-0.5px; color:#f0f9ff;">
+                <div style="font-size:1.2rem; font-weight:700; letter-spacing:-0.3px; color:#f1f5f9;">
                     {APP_NAME}
                 </div>
-                <div style="font-size:0.65rem; color:#7dd3fc; letter-spacing:2px;
+                <div style="font-size:0.62rem; color:#3b82f6; letter-spacing:1.5px;
                             text-transform:uppercase; font-weight:500; margin-top:1px;">
                     {APP_TAGLINE}
                 </div>
@@ -339,31 +396,85 @@ with st.sidebar:
         has_opt    = bool(st.session_state.get("optimization"))
 
         st.markdown(f"""
-        <div style="font-size:0.84rem; color:#cbd5e1; line-height:1.6;">
-          <b style="color:#f1f5f9; font-size:0.95rem;">{exp['name']}</b><br>
-          <span style="color:#7dd3fc;">{exp.get('design_type_name', '—')}</span><br>
-          {n_f} factors &nbsp;·&nbsp; {n_r} responses
+        <div style="font-size:0.8rem; color:#94a3b8; line-height:1.5;">
+          <b style="color:#e2e8f0; font-size:0.87rem;">{exp['name']}</b><br>
+          <span style="color:#3b82f6; font-size:0.78rem;">{exp.get('design_type_name', '—')}</span><br>
+          <span style="font-size:0.76rem;">{n_f} factors &nbsp;·&nbsp; {n_r} responses</span>
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("<div style='margin-top:10px;'>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:8px;'>", unsafe_allow_html=True)
         steps = [("Design", has_design), ("Data", has_data),
                  ("Models", has_models), ("Optimized", has_opt)]
         for label, done in steps:
-            icon  = "✅" if done else "◻️"
-            color = "#4ade80" if done else "#475569"
-            st.markdown(f"<span style='color:{color}; font-size:0.82rem;'>{icon} {label}</span>",
+            icon  = "●" if done else "○"
+            color = "#10b981" if done else "#334155"
+            st.markdown(f"<span style='color:{color}; font-size:0.78rem;'>{icon} {label}</span>",
                         unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.divider()
-    st.markdown(f"<span style='color:#5b8fa8; font-size:0.74rem;'>v{APP_VERSION} &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; Free Forever</span>",
+    st.markdown(f"<span style='color:#334155; font-size:0.72rem;'>v{APP_VERSION} &nbsp;·&nbsp; Open Source &nbsp;·&nbsp; Free Forever</span>",
                 unsafe_allow_html=True)
     if st.button("🗑️ New Experiment", use_container_width=True):
         for k in ["experiment", "models", "optimization", "ai_history", "wizard_step"]:
             if k in st.session_state:
                 del st.session_state[k]
         st.rerun()
+
+
+# ─── Demo Loader ──────────────────────────────────────────────────────────────
+def _load_demo():
+    from utils.doe_engine import generate_design, build_design_dataframe
+    from utils.stats import fit_mlr
+
+    factors = [
+        {"name": "Temperature",   "low": 60.0,  "high": 90.0,  "unit": "°C"},
+        {"name": "pH",            "low": 4.0,   "high": 8.0,   "unit": ""},
+        {"name": "Stirring Speed","low": 200.0, "high": 600.0, "unit": "rpm"},
+    ]
+    responses = [
+        {"name": "Yield",  "unit": "%", "importance": 3},
+        {"name": "Purity", "unit": "%", "importance": 3},
+    ]
+    factor_names  = [f["name"] for f in factors]
+    factor_ranges = [(f["low"], f["high"]) for f in factors]
+
+    design = generate_design("ccd", 3, center_points=3, ccd_face="ccf", randomize=False)
+    coded_df, natural_df = build_design_dataframe(design, factor_names, factor_ranges)
+
+    # Synthetic response data (deterministic, no noise — clean demo curves)
+    T, pH, S = design[:, 0], design[:, 1], design[:, 2]
+    yield_vals = (78 + 7*T - 4*pH + 2*S
+                  - 5*T**2 - 3*pH**2 - 1.5*S**2
+                  + 2*T*pH - 1.5*T*S + pH*S)
+    purity_vals = (85 - 3*T + 5*pH + 1.5*S
+                   - 4*T**2 - 6*pH**2 - 2*S**2
+                   - 2*T*pH + T*S - 2*pH*S)
+
+    resp_df = pd.DataFrame({"Yield": yield_vals, "Purity": purity_vals})
+
+    models = {}
+    for rname, y_arr in [("Yield", yield_vals), ("Purity", purity_vals)]:
+        models[rname] = fit_mlr(design, y_arr, degree="quadratic",
+                                factor_names=factor_names)
+
+    st.session_state.experiment = {
+        "name": "Reaction Optimization (Demo)",
+        "objective": "Maximize Yield and Purity",
+        "description": "3-factor CCD demo — Temperature, pH, Stirring Speed",
+        "factors": factors,
+        "responses": responses,
+        "design_type_name": "Central Composite Design (CCD)",
+        "design_key": "ccd",
+        "design_matrix": coded_df,
+        "natural_matrix": natural_df,
+        "response_data": resp_df,
+    }
+    st.session_state.models = models
+    st.session_state.optimization = {}
+    st.session_state.wizard_step = 1
+    st.session_state.page = "📈 Visualization"
 
 
 # ─── Dashboard ────────────────────────────────────────────────────────────────
@@ -386,14 +497,14 @@ def _render_welcome():
     """, unsafe_allow_html=True)
 
     # CTA buttons
-    c1, c2, c3 = st.columns([2, 2, 3])
+    c1, c2, c3 = st.columns([2, 2, 2])
     with c1:
         if st.button("🚀 Start New Experiment", type="primary", use_container_width=True):
             st.session_state.page = "🔬 Design Wizard"
             st.rerun()
     with c2:
-        if st.button("📖 How It Works", use_container_width=True):
-            st.session_state.show_guide = not st.session_state.get("show_guide", False)
+        if st.button("⚡ Load Demo Experiment", use_container_width=True):
+            _load_demo()
             st.rerun()
 
     st.markdown("---")
@@ -469,13 +580,13 @@ def _render_welcome():
         ]
         for icon, name, factors, desc in design_info:
             st.markdown(f"""
-            <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 0;
-                        border-bottom:1px solid #f1f5f9;">
-                <span style="font-size:1.4rem; margin-top:2px;">{icon}</span>
+            <div style="display:flex; align-items:flex-start; gap:10px; padding:8px 0;
+                        border-bottom:1px solid #1e2d45;">
+                <span style="font-size:1.1rem; margin-top:2px; opacity:0.8;">{icon}</span>
                 <div>
-                    <b style="font-size:0.93rem;">{name}</b>
-                    <span style="color:#64748b; font-size:0.82rem; margin-left:8px;">{factors}</span><br>
-                    <span style="color:#64748b; font-size:0.82rem;">{desc}</span>
+                    <b style="font-size:0.85rem; color:#e2e8f0;">{name}</b>
+                    <span style="color:#3b82f6; font-size:0.78rem; margin-left:8px;">{factors}</span><br>
+                    <span style="color:#64748b; font-size:0.78rem;">{desc}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -483,16 +594,16 @@ def _render_welcome():
     with col_cmp:
         st.markdown("### FactorLab vs MODDE")
         st.markdown("""
-<table class="fl-compare" style="width:100%; border-collapse:collapse; border-radius:10px; overflow:hidden; border:1px solid #e2e8f0;">
+<table class="fl-compare" style="width:100%; border-collapse:collapse; border-radius:5px; overflow:hidden; border:1px solid #1e2d45; background:#0a1628;">
 <tr><th>Feature</th><th>FactorLab</th><th>MODDE</th></tr>
-<tr><td>Price</td><td>✅ <b>Free</b></td><td>💰 €3,000+/yr</td></tr>
-<tr><td>Platform</td><td>✅ <b>Web</b></td><td>Windows only</td></tr>
-<tr><td>AI Interpretation</td><td>✅ <b>Claude AI</b></td><td>❌</td></tr>
-<tr><td>Open Source</td><td>✅ GitHub</td><td>❌</td></tr>
-<tr><td>MLR / PLS</td><td>✅</td><td>✅</td></tr>
-<tr><td>Response Surface</td><td>✅ Interactive</td><td>✅ Static</td></tr>
-<tr><td>Sweet Spot Plot</td><td>✅ + Zone Box</td><td>✅</td></tr>
-<tr><td>Collaboration</td><td>✅ Multi-user</td><td>❌</td></tr>
+<tr><td>Price</td><td style="color:#10b981;">✓ Free</td><td style="color:#64748b;">€3,000+/yr</td></tr>
+<tr><td>Platform</td><td style="color:#10b981;">✓ Web</td><td style="color:#64748b;">Windows only</td></tr>
+<tr><td>AI Interpretation</td><td style="color:#10b981;">✓ Claude AI</td><td style="color:#64748b;">—</td></tr>
+<tr><td>Open Source</td><td style="color:#10b981;">✓ GitHub</td><td style="color:#64748b;">—</td></tr>
+<tr><td>MLR / PLS</td><td style="color:#10b981;">✓</td><td style="color:#60a5fa;">✓</td></tr>
+<tr><td>Response Surface</td><td style="color:#10b981;">✓ Interactive</td><td style="color:#60a5fa;">✓ Static</td></tr>
+<tr><td>Sweet Spot Plot</td><td style="color:#10b981;">✓ + Zone Box</td><td style="color:#60a5fa;">✓</td></tr>
+<tr><td>Collaboration</td><td style="color:#10b981;">✓ Multi-user</td><td style="color:#64748b;">—</td></tr>
 </table>
 """, unsafe_allow_html=True)
 
@@ -508,12 +619,10 @@ def _render_experiment_dashboard(exp):
     has_opt    = bool(st.session_state.get("optimization"))
 
     st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-                border: 1px solid #bae6fd; border-left: 5px solid #0891b2;
-                border-radius: 12px; padding: 20px 28px; margin-bottom: 22px;
-                box-shadow: 0 2px 10px rgba(8,145,178,0.08);">
-        <div style="font-size:1.4rem; font-weight:800; color:#0c2d4e;">🔬 {exp['name']}</div>
-        <div style="color:#0369a1; font-size:0.88rem; margin-top:5px; font-weight:500;">
+    <div style="background:#0a1628; border:1px solid #1e2d45; border-left:3px solid #3b82f6;
+                border-radius:6px; padding:14px 20px; margin-bottom:16px;">
+        <div style="font-size:1.1rem; font-weight:700; color:#f1f5f9;">🔬 {exp['name']}</div>
+        <div style="color:#60a5fa; font-size:0.8rem; margin-top:4px;">
             {exp.get('design_type_name','—')} &nbsp;·&nbsp;
             {len(exp.get('factors',[]))} factors &nbsp;·&nbsp;
             {len(exp.get('responses',[]))} responses
@@ -541,21 +650,21 @@ def _render_experiment_dashboard(exp):
         with pcols[i]:
             if done:
                 st.markdown(f"""
-                <div style="border:1px solid #a7f3d0; border-top:3px solid #059669;
-                            border-radius:10px; padding:14px; text-align:center;
-                            background:#f0fdf4; box-shadow:0 1px 4px rgba(5,150,105,0.08);">
-                    <div style="font-size:1.3rem;">✅</div>
-                    <div style="font-weight:700; font-size:0.83rem; color:#065f46; margin-top:4px;">
+                <div style="border:1px solid #134e30; border-top:2px solid #10b981;
+                            border-radius:5px; padding:10px 12px; text-align:center;
+                            background:#052e16;">
+                    <div style="font-size:1.0rem;">●</div>
+                    <div style="font-weight:600; font-size:0.8rem; color:#6ee7b7; margin-top:3px;">
                         {label}</div>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown(f"""
-                <div style="border:1px solid #bae6fd; border-top:3px solid #0891b2;
-                            border-radius:10px; padding:14px; text-align:center;
-                            background:white; box-shadow:0 1px 4px rgba(8,145,178,0.06);">
-                    <div style="font-size:1.3rem;">◻️</div>
-                    <div style="font-weight:600; font-size:0.83rem; color:#0369a1; margin-top:4px;">
+                <div style="border:1px solid #1e2d45; border-top:2px solid #1e3a6e;
+                            border-radius:5px; padding:10px 12px; text-align:center;
+                            background:#0a1628;">
+                    <div style="font-size:1.0rem; color:#334155;">○</div>
+                    <div style="font-weight:500; font-size:0.8rem; color:#475569; margin-top:3px;">
                         {label}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -588,14 +697,13 @@ def _render_experiment_dashboard(exp):
             d_color = "#059669" if d > 0.7 else ("#f59e0b" if d > 0.4 else "#ef4444")
             d_label = "🟢 Excellent (≥ 0.7)" if d >= 0.7 else ("🟡 Acceptable (≥ 0.4)" if d >= 0.4 else "🔴 Low — review limits")
             st.markdown(f"""
-            <div style="text-align:center; padding:26px 16px;
-                        background:{d_color}10; border-radius:14px;
-                        border:2px solid {d_color}40;
-                        box-shadow:0 2px 14px {d_color}20;">
-                <div style="font-size:3rem; font-weight:900; color:{d_color}; line-height:1;">{d:.2f}</div>
-                <div style="font-size:0.78rem; font-weight:700; color:{d_color}; text-transform:uppercase;
-                            letter-spacing:1px; margin-top:6px;">Overall Desirability</div>
-                <div style="font-size:0.75rem; color:#64748b; margin-top:8px;">{d_label}</div>
+            <div style="text-align:center; padding:18px 14px;
+                        background:#0a1628; border-radius:6px;
+                        border:1px solid #1e2d45; border-top:2px solid {d_color};">
+                <div style="font-size:2.4rem; font-weight:800; color:{d_color}; line-height:1;">{d:.2f}</div>
+                <div style="font-size:0.72rem; font-weight:600; color:{d_color}; text-transform:uppercase;
+                            letter-spacing:1px; margin-top:5px;">Overall Desirability</div>
+                <div style="font-size:0.72rem; color:#64748b; margin-top:6px;">{d_label}</div>
             </div>
             """, unsafe_allow_html=True)
         with c2:
