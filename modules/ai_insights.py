@@ -74,18 +74,44 @@ def _build_context(exp, models, optimization) -> str:
     return "\n".join(lines)
 
 
+def _nav(page):
+    st.session_state.page = page
+    st.rerun()
+
+
 def render_ai_insights():
     st.title("🤖 AI Insights")
-    st.markdown("Claude analyzes your experiment and provides expert interpretation — "
-                "the feature MODDE doesn't have.")
 
     exp = st.session_state.experiment
     models = st.session_state.get("models", {})
     optimization = st.session_state.get("optimization", {})
 
     if not exp.get("name"):
-        st.warning("No experiment found. Please complete the Design Wizard first.")
+        st.warning("No experiment loaded.")
+        if st.button("← Go to Design Wizard", key="ai_nodsgn"):
+            _nav("🔬 Design Wizard")
         return
+
+    # Navigation row
+    c_back, c_info = st.columns([1, 5])
+    with c_back:
+        if st.button("← Visualization", use_container_width=True):
+            _nav("📈 Visualization")
+    with c_info:
+        model_status = f"{len(models)} models fitted" if models else "No models yet"
+        opt_status = "✓ Optimized" if optimization else "Not optimized"
+        st.markdown(
+            f"<div style='font-size:0.82rem; color:#64748b; padding-top:6px;'>"
+            f"<b style='color:#e2e8f0;'>{exp['name']}</b> &nbsp;·&nbsp; "
+            f"{model_status} &nbsp;·&nbsp; {opt_status}"
+            f"</div>", unsafe_allow_html=True)
+
+    if not models:
+        st.info("AI Insights works best after fitting models. Go to **Analysis** first.")
+        if st.button("← Go to Analysis", key="ai_nomdl"):
+            _nav("📊 Analysis")
+
+    st.divider()
 
     # API Key
     with st.expander("🔑 API Key Setup", expanded=not bool(os.environ.get("ANTHROPIC_API_KEY"))):

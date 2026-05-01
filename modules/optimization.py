@@ -8,10 +8,15 @@ import plotly.express as px
 from utils.stats import run_optimization, perturbation_analysis, predict_response
 from utils.doe_engine import coded_to_natural
 
-PLOTLY_TEMPLATE = "plotly_white"
-PRIMARY = "#1e40af"
+PLOTLY_TEMPLATE = "plotly_dark"
+PRIMARY = "#3b82f6"
 SUCCESS = "#10b981"
 WARN = "#f59e0b"
+
+
+def _nav(page):
+    st.session_state.page = page
+    st.rerun()
 
 
 def render_optimization():
@@ -19,12 +24,34 @@ def render_optimization():
 
     exp = st.session_state.experiment
     if not exp.get("name"):
-        st.warning("No experiment found. Please complete the Design Wizard.")
+        st.warning("No experiment loaded.")
+        if st.button("← Go to Design Wizard", key="opt_nodsgn"):
+            _nav("🔬 Design Wizard")
         return
     if not st.session_state.get("models"):
-        st.warning("No fitted models. Please complete the Analysis step first.")
+        st.warning("No fitted models — please complete the Analysis step first.")
+        if st.button("← Go to Analysis", key="opt_nomdl"):
+            _nav("📊 Analysis")
         return
 
+    # Navigation row
+    c_back, c_info, c_fwd = st.columns([1, 4, 1])
+    with c_back:
+        if st.button("← Analysis", use_container_width=True):
+            _nav("📊 Analysis")
+    with c_info:
+        has_opt = bool(st.session_state.get("optimization"))
+        st.markdown(
+            f"<div style='font-size:0.82rem; color:#64748b; padding-top:6px;'>"
+            f"<b style='color:#e2e8f0;'>{exp['name']}</b> &nbsp;·&nbsp; "
+            f"{len(st.session_state.get('models', {}))} models fitted"
+            f"</div>", unsafe_allow_html=True)
+    with c_fwd:
+        has_opt = bool(st.session_state.get("optimization"))
+        if st.button("Visualization →", use_container_width=True, disabled=not has_opt):
+            _nav("📈 Visualization")
+
+    st.divider()
     tab1, tab2, tab3 = st.tabs(["⚙️ Configure & Run", "📍 Optimal Conditions", "📉 Perturbation"])
 
     with tab1:
@@ -130,6 +157,8 @@ def _tab_configure(exp):
                 st.success(f"✅ Optimization complete! Overall desirability: **{d:.3f}**")
                 if d < 0.3:
                     st.warning("Low desirability — check that your limits are achievable within the design space.")
+                if st.button("→ View in Visualization", type="primary", key="goto_viz"):
+                    _nav("📈 Visualization")
             except Exception as e:
                 st.error(f"Optimization failed: {e}")
 
@@ -142,6 +171,7 @@ def _tab_results(exp):
     if not opt:
         st.info("Run optimization in the **Configure & Run** tab first.")
         return
+
 
     d = opt["desirability"]
     d_color = SUCCESS if d > 0.7 else (WARN if d > 0.4 else "#ef4444")

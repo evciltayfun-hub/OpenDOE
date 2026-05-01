@@ -9,30 +9,51 @@ import io
 
 from utils.stats import fit_mlr, fit_pls
 
-PLOTLY_TEMPLATE = "plotly_white"
-PRIMARY = "#1e40af"
+PLOTLY_TEMPLATE = "plotly_dark"
+PRIMARY = "#3b82f6"
 SUCCESS = "#10b981"
 DANGER = "#ef4444"
 WARN = "#f59e0b"
 
 
+def _nav(page):
+    st.session_state.page = page
+    st.rerun()
+
+
 def render_analysis():
-    st.title("📊 Analysis Wizard")
+    st.title("📊 Analysis")
 
     exp = st.session_state.experiment
     if not exp.get("name"):
-        st.warning("No experiment found. Please complete the Design Wizard first.")
+        st.warning("No experiment loaded.")
+        if st.button("← Go to Design Wizard", key="ana_nodsgn"):
+            _nav("🔬 Design Wizard")
         return
     if exp.get("design_matrix") is None:
         st.warning("No design matrix. Please complete the Design Wizard first.")
+        if st.button("← Go to Design Wizard", key="ana_nomat"):
+            _nav("🔬 Design Wizard")
         return
 
-    st.markdown(f"**Experiment:** {exp['name']}  |  "
-                f"**Design:** {exp.get('design_type_name', '—')}  |  "
-                f"**Factors:** {len(exp['factors'])}  |  "
-                f"**Responses:** {len(exp['responses'])}")
-    st.divider()
+    # Navigation row
+    c_back, c_info, c_fwd = st.columns([1, 4, 1])
+    with c_back:
+        if st.button("← Design Wizard", use_container_width=True):
+            _nav("🔬 Design Wizard")
+    with c_info:
+        st.markdown(
+            f"<div style='font-size:0.82rem; color:#64748b; padding-top:6px;'>"
+            f"<b style='color:#e2e8f0;'>{exp['name']}</b> &nbsp;·&nbsp; "
+            f"{exp.get('design_type_name','—')} &nbsp;·&nbsp; "
+            f"{len(exp['factors'])} factors &nbsp;·&nbsp; {len(exp['responses'])} responses"
+            f"</div>", unsafe_allow_html=True)
+    with c_fwd:
+        if st.button("Optimization →", use_container_width=True,
+                     disabled=not bool(st.session_state.get("models"))):
+            _nav("🎯 Optimization")
 
+    st.divider()
     tab1, tab2, tab3 = st.tabs(["📥 Enter Data", "⚙️ Fit Models", "📈 Diagnostics"])
 
     with tab1:
@@ -197,7 +218,9 @@ def _tab_fit_models(exp):
         if models:
             st.session_state.models = models
             st.session_state.optimization = {}
-            st.success("✅ All models fitted successfully! Check **Diagnostics** tab.")
+            st.success("✅ All models fitted successfully!")
+            if st.button("→ Continue to Optimization", type="primary", key="goto_opt"):
+                _nav("🎯 Optimization")
 
     # Show existing model summary
     if st.session_state.models:
@@ -236,7 +259,7 @@ def _tab_diagnostics(exp):
     st.subheader("Model Diagnostics")
 
     if not st.session_state.models:
-        st.info("No models fitted yet. Please use the **Fit Models** tab.")
+        st.info("No models fitted yet — go to the **Fit Models** tab first.")
         return
 
     rnames = list(st.session_state.models.keys())

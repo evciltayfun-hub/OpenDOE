@@ -26,18 +26,43 @@ MODDE_COLORSCALE = [
 N_GRID = 50
 
 
+def _nav(page):
+    st.session_state.page = page
+    st.rerun()
+
+
 def render_visualization():
     st.title("📈 Visualization")
-    st.markdown("Interactive response surface plots, contour maps, and design space exploration.")
 
     exp = st.session_state.experiment
     if not exp.get("name"):
-        st.warning("No experiment found. Please complete the Design Wizard.")
+        st.warning("No experiment loaded.")
+        if st.button("← Go to Design Wizard", key="viz_nodsgn"):
+            _nav("🔬 Design Wizard")
         return
     if not st.session_state.get("models"):
-        st.warning("No fitted models. Complete the Analysis step first.")
+        st.warning("No fitted models — please complete the Analysis step first.")
+        if st.button("← Go to Analysis", key="viz_nomdl"):
+            _nav("📊 Analysis")
         return
 
+    # Navigation row
+    c_back, c_info, c_fwd = st.columns([1, 4, 1])
+    with c_back:
+        if st.button("← Optimization", use_container_width=True):
+            _nav("🎯 Optimization")
+    with c_info:
+        st.markdown(
+            f"<div style='font-size:0.82rem; color:#64748b; padding-top:6px;'>"
+            f"<b style='color:#e2e8f0;'>{exp['name']}</b> &nbsp;·&nbsp; "
+            f"{len(st.session_state.get('models', {}))} models &nbsp;·&nbsp; "
+            f"{'✓ Optimized' if st.session_state.get('optimization') else 'Not optimized'}"
+            f"</div>", unsafe_allow_html=True)
+    with c_fwd:
+        if st.button("AI Insights →", use_container_width=True):
+            _nav("🤖 AI Insights")
+
+    st.divider()
     tab1, tab2, tab3, tab4 = st.tabs([
         "🌐 Response Surface (3D)",
         "🗺️ Contour / Sweet Spot",
