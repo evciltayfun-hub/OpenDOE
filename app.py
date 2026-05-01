@@ -32,6 +32,14 @@ st.markdown("""
      Text:       #f1f5f9  |  Muted: #64748b
   ════════════════════════════════════════════════════ */
 
+  /* ── Hide Streamlit toolbar & footer ──────────────── */
+  [data-testid="stToolbar"]        { display: none !important; }
+  [data-testid="stDecoration"]     { display: none !important; }
+  [data-testid="stStatusWidget"]   { display: none !important; }
+  #MainMenu                        { display: none !important; }
+  footer                           { display: none !important; }
+  header[data-testid="stHeader"]   { display: none !important; }
+
   /* ── Page background ───────────────────────────────── */
   .stApp { background-color: #020817; color: #f1f5f9; }
   .block-container { background: transparent; }
