@@ -22,286 +22,227 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── Custom CSS — AQUIONIS-inspired Dark Theme ───────────────────────────────
-st.markdown("""
-<style>
-  /* ══════════════════════════════════════════════
-     FACTORLAB — AQUIONIS-inspired Dark Theme
-     Page:    #0b0f14  |  Sidebar: #0d1117
-     Card:    #161b22  |  Border:  #21262d
-     Accent:  #00c9a7  |  Text:    #e6edf3
-  ══════════════════════════════════════════════ */
+# ─── Theme CSS ────────────────────────────────────────────────────────────────
+_THEMES = {
+    "Dark": {
+        "page":    "#0b0f14", "sidebar":  "#0d1117", "card":    "#161b22",
+        "card2":   "#1c2128", "border":   "#21262d", "border2": "#30363d",
+        "accent":  "#00c9a7", "accent2":  "#00b396", "green":   "#238636",
+        "text":    "#e6edf3", "text2":    "#c9d1d9", "muted":   "#7d8590",
+        "label":   "#444d56", "input_bg": "#0d1117",
+        "btn_txt": "#0b0f14",
+    },
+    "Light": {
+        "page":    "#f4f6f8", "sidebar":  "#ffffff",  "card":    "#ffffff",
+        "card2":   "#f0faf8", "border":   "#d0d7de",  "border2": "#b8c0c8",
+        "accent":  "#0a7c6a", "accent2":  "#085f52",  "green":   "#1a7f37",
+        "text":    "#1f2328", "text2":    "#424a53",   "muted":   "#57606a",
+        "label":   "#8c959f", "input_bg": "#ffffff",
+        "btn_txt": "#ffffff",
+    },
+}
 
+def _apply_theme():
+    t = _THEMES[st.session_state.get("theme", "Dark")]
+    st.markdown(f"""
+<style>
   /* Hide Streamlit chrome */
-  [data-testid="stToolbar"],
-  [data-testid="stDecoration"],
-  [data-testid="stStatusWidget"],
-  #MainMenu, footer,
-  header[data-testid="stHeader"]          { display: none !important; }
+  [data-testid="stToolbar"],[data-testid="stDecoration"],
+  [data-testid="stStatusWidget"],#MainMenu,footer,
+  header[data-testid="stHeader"]       {{ display:none !important; }}
   [data-testid="stSidebarCollapseButton"],
-  [data-testid="collapsedControl"]        { display: none !important; }
+  [data-testid="collapsedControl"]     {{ display:none !important; }}
 
   /* Page */
-  .stApp                    { background: #0b0f14; color: #e6edf3; }
-  .block-container          { background: transparent; padding-top: 16px !important; }
+  .stApp           {{ background:{t['page']}; color:{t['text']}; }}
+  .block-container {{ background:transparent; padding-top:16px !important; }}
 
   /* Sidebar */
-  [data-testid="stSidebar"] {
-    background: #0d1117 !important;
-    border-right: 1px solid #21262d !important;
-    min-width: 220px !important;
-  }
-  [data-testid="stSidebar"] * { color: #7d8590 !important; }
-  [data-testid="stSidebar"] hr { border-color: #21262d !important; margin: 6px 0 !important; }
+  [data-testid="stSidebar"] {{
+    background:{t['sidebar']} !important;
+    border-right:1px solid {t['border']} !important;
+    min-width:220px !important;
+  }}
+  [data-testid="stSidebar"] * {{ color:{t['muted']} !important; }}
+  [data-testid="stSidebar"] hr {{ border-color:{t['border']} !important; margin:6px 0 !important; }}
 
-  /* Sidebar section labels */
-  .sb-section {
-    font-size: 0.68rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 1.2px !important;
-    text-transform: uppercase !important;
-    color: #444d56 !important;
-    padding: 10px 14px 4px 14px !important;
-    display: block !important;
-  }
+  .sb-section {{
+    font-size:0.68rem !important; font-weight:700 !important;
+    letter-spacing:1.2px !important; text-transform:uppercase !important;
+    color:{t['label']} !important; padding:10px 14px 4px 14px !important;
+    display:block !important;
+  }}
 
-  /* Sidebar nav buttons */
-  [data-testid="stSidebar"] .stButton > button {
-    background: transparent !important;
-    border: none !important;
-    border-left: 2px solid transparent !important;
-    border-radius: 0 !important;
-    text-align: left !important;
-    justify-content: flex-start !important;
-    padding: 7px 14px !important;
-    width: 100% !important;
-    font-size: 0.84rem !important;
-    font-weight: 400 !important;
-    color: #7d8590 !important;
-    transition: all 0.1s !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-  [data-testid="stSidebar"] .stButton > button:hover {
-    background: #161b22 !important;
-    color: #e6edf3 !important;
-    border-left-color: #30363d !important;
-  }
-  [data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    background: #1c2128 !important;
-    border-left-color: #00c9a7 !important;
-    color: #e6edf3 !important;
-    font-weight: 500 !important;
-  }
+  [data-testid="stSidebar"] .stButton > button {{
+    background:transparent !important; border:none !important;
+    border-left:2px solid transparent !important; border-radius:0 !important;
+    text-align:left !important; justify-content:flex-start !important;
+    padding:7px 14px !important; width:100% !important;
+    font-size:0.84rem !important; font-weight:400 !important;
+    color:{t['muted']} !important; transition:all 0.1s !important;
+    box-shadow:none !important; margin:0 !important;
+    height:auto !important; min-height:0 !important;
+  }}
+  [data-testid="stSidebar"] .stButton > button:hover {{
+    background:{t['card']} !important; color:{t['text']} !important;
+    border-left-color:{t['border2']} !important;
+  }}
+  [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
+    background:{t['card2']} !important;
+    border-left-color:{t['accent']} !important;
+    color:{t['text']} !important; font-weight:500 !important;
+  }}
 
   /* Metric cards */
-  [data-testid="metric-container"] {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-top: 2px solid #00c9a7;
-    border-radius: 6px;
-    padding: 10px 14px;
-  }
-  [data-testid="metric-container"] [data-testid="stMetricValue"] {
-    color: #00c9a7 !important;
-    font-weight: 700;
-    font-size: 1.5rem !important;
-  }
-  [data-testid="metric-container"] [data-testid="stMetricLabel"] {
-    color: #7d8590 !important;
-    font-size: 0.73rem !important;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
+  [data-testid="metric-container"] {{
+    background:{t['card']}; border:1px solid {t['border']};
+    border-top:2px solid {t['accent']}; border-radius:6px; padding:10px 14px;
+  }}
+  [data-testid="metric-container"] [data-testid="stMetricValue"] {{
+    color:{t['accent']} !important; font-weight:700; font-size:1.5rem !important;
+  }}
+  [data-testid="metric-container"] [data-testid="stMetricLabel"] {{
+    color:{t['muted']} !important; font-size:0.73rem !important;
+    text-transform:uppercase; letter-spacing:0.5px;
+  }}
 
-  /* Panels */
-  .fl-panel {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 6px;
-    padding: 14px 18px;
-    margin-bottom: 12px;
-  }
+  .fl-panel {{
+    background:{t['card']}; border:1px solid {t['border']};
+    border-radius:6px; padding:14px 18px; margin-bottom:12px;
+  }}
 
-  /* Workflow step cards */
-  .wf-card {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 8px;
-    padding: 18px 14px 16px;
-    height: 100%;
-    position: relative;
-  }
-  .wf-card.wf-active  { border-color: #00c9a7; }
-  .wf-card.wf-done    { border-color: #238636; }
-  .wf-num {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 30px; height: 30px; border-radius: 50%;
-    font-size: 0.82rem; font-weight: 700; margin-bottom: 10px;
-  }
-  .wf-num.active  { background: #00c9a7; color: #0b0f14 !important; }
-  .wf-num.done    { background: #238636; color: #fff !important; }
-  .wf-num.locked  { background: #21262d; color: #444d56 !important; }
-  .wf-title       { font-size: 0.9rem; font-weight: 600; color: #e6edf3; margin-bottom: 5px; }
-  .wf-title.locked{ color: #444d56; }
-  .wf-desc        { font-size: 0.77rem; color: #7d8590; line-height: 1.45; }
-  .wf-arrow {
-    display: flex; align-items: center; justify-content: center;
-    color: #30363d; font-size: 1.1rem; padding-top: 30px;
-  }
-  .wf-action {
-    display: inline-block; margin-top: 10px;
-    font-size: 0.75rem; color: #00c9a7; font-weight: 500;
-  }
+  /* Workflow cards */
+  .wf-card {{
+    background:{t['card']}; border:1px solid {t['border']};
+    border-radius:8px; padding:18px 14px 16px; height:100%;
+  }}
+  .wf-card.wf-active {{ border-color:{t['accent']}; }}
+  .wf-card.wf-done   {{ border-color:{t['green']}; }}
+  .wf-num {{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:30px; height:30px; border-radius:50%;
+    font-size:0.82rem; font-weight:700; margin-bottom:10px;
+  }}
+  .wf-num.active {{ background:{t['accent']}; color:{t['page']} !important; }}
+  .wf-num.done   {{ background:{t['green']};  color:#fff !important; }}
+  .wf-num.locked {{ background:{t['border']}; color:{t['label']} !important; }}
+  .wf-title        {{ font-size:0.9rem; font-weight:600; color:{t['text']}; margin-bottom:5px; }}
+  .wf-title.locked {{ color:{t['label']}; }}
+  .wf-desc  {{ font-size:0.77rem; color:{t['muted']}; line-height:1.45; }}
+  .wf-arrow {{
+    display:flex; align-items:center; justify-content:center;
+    color:{t['border2']}; font-size:1.1rem; padding-top:30px;
+  }}
+  .wf-action {{
+    display:inline-block; margin-top:10px;
+    font-size:0.75rem; color:{t['accent']}; font-weight:500;
+  }}
 
   /* Hero */
-  .fl-hero {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-left: 3px solid #00c9a7;
-    border-radius: 8px;
-    padding: 22px 28px;
-    margin-bottom: 18px;
-  }
-  .fl-hero h1 { color: #e6edf3 !important; font-size: 1.6rem !important; margin: 0; font-weight: 700; }
-  .fl-hero p  { color: #7d8590; margin: 5px 0 0 0; font-size: 0.87rem; }
+  .fl-hero {{
+    background:{t['card']}; border:1px solid {t['border']};
+    border-left:3px solid {t['accent']}; border-radius:8px;
+    padding:22px 28px; margin-bottom:18px;
+  }}
+  .fl-hero h1 {{ color:{t['text']} !important; font-size:1.6rem !important; margin:0; font-weight:700; }}
+  .fl-hero p  {{ color:{t['muted']}; margin:5px 0 0 0; font-size:0.87rem; }}
 
-  /* Badge */
-  .fl-badge {
-    display: inline-block;
-    background: #1c2128;
-    border: 1px solid #30363d;
-    border-radius: 3px;
-    padding: 2px 8px;
-    font-size: 0.72rem;
-    color: #7d8590;
-    font-weight: 500;
-    margin: 2px 2px 2px 0;
-  }
+  .fl-badge {{
+    display:inline-block; background:{t['card2']}; border:1px solid {t['border2']};
+    border-radius:3px; padding:2px 8px; font-size:0.72rem;
+    color:{t['muted']}; font-weight:500; margin:2px 2px 2px 0;
+  }}
 
-  /* Compare table */
-  .fl-compare td { padding: 6px 12px; font-size: 0.8rem; border-bottom: 1px solid #21262d; color: #7d8590; }
-  .fl-compare th { background: #161b22; padding: 7px 12px; font-size: 0.75rem;
-                   color: #7d8590; font-weight: 600; border-bottom: 1px solid #21262d;
-                   text-transform: uppercase; letter-spacing: 0.5px; }
+  .fl-compare td {{ padding:6px 12px; font-size:0.8rem; border-bottom:1px solid {t['border']}; color:{t['muted']}; }}
+  .fl-compare th {{ background:{t['card']}; padding:7px 12px; font-size:0.75rem;
+                    color:{t['muted']}; font-weight:600; border-bottom:1px solid {t['border']};
+                    text-transform:uppercase; letter-spacing:0.5px; }}
 
-  /* Buttons (main area) */
-  .stButton > button[kind="primary"] {
-    background: #00c9a7 !important;
-    border: 1px solid #00c9a7 !important;
-    border-radius: 5px !important;
-    font-weight: 600 !important;
-    font-size: 0.84rem !important;
-    color: #0b0f14 !important;
-  }
-  .stButton > button[kind="primary"]:hover {
-    background: #00b396 !important;
-    border-color: #00b396 !important;
-  }
-  .stButton > button:not([kind="primary"]) {
-    border: 1px solid #21262d !important;
-    color: #7d8590 !important;
-    background: #161b22 !important;
-    border-radius: 5px !important;
-    font-size: 0.84rem !important;
-  }
-  .stButton > button:not([kind="primary"]):hover {
-    border-color: #00c9a7 !important;
-    color: #e6edf3 !important;
-  }
-  /* Disabled buttons in sidebar should not get main area styling */
-  [data-testid="stSidebar"] .stButton > button[kind="primary"] {
-    color: #e6edf3 !important;
-    background: #1c2128 !important;
-    border-left-color: #00c9a7 !important;
-  }
+  /* Buttons */
+  .stButton > button[kind="primary"] {{
+    background:{t['accent']} !important; border:1px solid {t['accent']} !important;
+    border-radius:5px !important; font-weight:600 !important;
+    font-size:0.84rem !important; color:{t['btn_txt']} !important;
+  }}
+  .stButton > button[kind="primary"]:hover {{
+    background:{t['accent2']} !important; border-color:{t['accent2']} !important;
+  }}
+  .stButton > button:not([kind="primary"]) {{
+    border:1px solid {t['border']} !important; color:{t['muted']} !important;
+    background:{t['card']} !important; border-radius:5px !important; font-size:0.84rem !important;
+  }}
+  .stButton > button:not([kind="primary"]):hover {{
+    border-color:{t['accent']} !important; color:{t['text']} !important;
+  }}
+  [data-testid="stSidebar"] .stButton > button[kind="primary"] {{
+    color:{t['text']} !important; background:{t['card2']} !important;
+    border-left-color:{t['accent']} !important;
+  }}
 
   /* Tabs */
-  .stTabs [data-baseweb="tab-list"] {
-    gap: 1px; background: #0d1117; border-radius: 5px; padding: 3px;
-    border: 1px solid #21262d;
-  }
-  .stTabs [data-baseweb="tab"] {
-    border-radius: 4px; padding: 6px 16px;
-    color: #7d8590 !important; font-weight: 400; font-size: 0.83rem;
-  }
-  .stTabs [aria-selected="true"] {
-    background: #161b22 !important;
-    color: #e6edf3 !important;
-    font-weight: 600 !important;
-  }
+  .stTabs [data-baseweb="tab-list"] {{
+    gap:1px; background:{t['sidebar']}; border-radius:5px; padding:3px;
+    border:1px solid {t['border']};
+  }}
+  .stTabs [data-baseweb="tab"] {{
+    border-radius:4px; padding:6px 16px;
+    color:{t['muted']} !important; font-weight:400; font-size:0.83rem;
+  }}
+  .stTabs [aria-selected="true"] {{
+    background:{t['card']} !important; color:{t['text']} !important; font-weight:600 !important;
+  }}
 
-  /* Expanders */
-  [data-testid="stExpander"] {
-    border: 1px solid #21262d !important;
-    border-radius: 5px !important;
-    background: #161b22 !important;
-  }
-  [data-testid="stExpander"] summary { color: #7d8590 !important; font-size: 0.84rem !important; }
+  [data-testid="stExpander"] {{
+    border:1px solid {t['border']} !important; border-radius:5px !important;
+    background:{t['card']} !important;
+  }}
+  [data-testid="stExpander"] summary {{ color:{t['muted']} !important; font-size:0.84rem !important; }}
+  [data-testid="stDataFrame"] {{ border:1px solid {t['border']}; border-radius:5px; }}
+  [data-testid="stProgress"] > div > div {{ background:{t['accent']} !important; }}
 
-  /* Data tables */
-  [data-testid="stDataFrame"] { border: 1px solid #21262d; border-radius: 5px; }
+  h1 {{ color:{t['text']} !important; font-weight:700; font-size:1.4rem !important; }}
+  h2 {{ color:{t['text']} !important; font-weight:600; font-size:1.15rem !important; }}
+  h3 {{ color:{t['text2']} !important; font-weight:600; font-size:1.0rem !important; }}
+  h4 {{ color:{t['muted']} !important; font-weight:600; font-size:0.82rem !important;
+       text-transform:uppercase; letter-spacing:0.5px; }}
+  hr {{ border-color:{t['border']} !important; margin:12px 0; }}
+  p  {{ font-size:0.86rem; color:{t['text2']}; }}
 
-  /* Progress */
-  [data-testid="stProgress"] > div > div { background: #00c9a7 !important; }
-
-  /* Typography */
-  h1 { color: #e6edf3 !important; font-weight: 700; font-size: 1.4rem !important; }
-  h2 { color: #e6edf3 !important; font-weight: 600; font-size: 1.15rem !important; }
-  h3 { color: #c9d1d9 !important; font-weight: 600; font-size: 1.0rem !important; }
-  h4 { color: #7d8590 !important; font-weight: 600; font-size: 0.82rem !important;
-       text-transform: uppercase; letter-spacing: 0.5px; }
-  hr { border-color: #21262d !important; margin: 12px 0; }
-  p  { font-size: 0.86rem; color: #c9d1d9; }
-
-  /* Inputs */
   [data-testid="stTextInput"] > div > div > input,
-  [data-testid="stNumberInput"] > div > div > input {
-    background: #0d1117 !important;
-    border-radius: 4px !important;
-    border: 1px solid #30363d !important;
-    color: #e6edf3 !important;
-    font-size: 0.86rem !important;
-  }
+  [data-testid="stNumberInput"] > div > div > input {{
+    background:{t['input_bg']} !important; border-radius:4px !important;
+    border:1px solid {t['border2']} !important; color:{t['text']} !important;
+    font-size:0.86rem !important;
+  }}
   [data-testid="stTextInput"] > div > div > input:focus,
-  [data-testid="stNumberInput"] > div > div > input:focus {
-    border-color: #00c9a7 !important;
-    box-shadow: 0 0 0 2px rgba(0,201,167,0.12) !important;
-  }
-  [data-testid="stSelectbox"] > div > div {
-    background: #0d1117 !important;
-    border-radius: 4px !important;
-    border: 1px solid #30363d !important;
-    color: #e6edf3 !important;
-    font-size: 0.86rem !important;
-  }
-  [data-testid="stTextArea"] textarea {
-    background: #0d1117 !important;
-    border: 1px solid #30363d !important;
-    color: #e6edf3 !important;
-    font-size: 0.86rem !important;
-    border-radius: 4px !important;
-  }
-  [data-baseweb="select"] * { color: #e6edf3 !important; }
-  [data-baseweb="popover"]  { background: #161b22 !important; border: 1px solid #21262d !important; }
-  [data-baseweb="option"]:hover { background: #1c2128 !important; }
+  [data-testid="stNumberInput"] > div > div > input:focus {{
+    border-color:{t['accent']} !important;
+    box-shadow:0 0 0 2px rgba(0,201,167,0.12) !important;
+  }}
+  [data-testid="stSelectbox"] > div > div {{
+    background:{t['input_bg']} !important; border-radius:4px !important;
+    border:1px solid {t['border2']} !important; color:{t['text']} !important;
+    font-size:0.86rem !important;
+  }}
+  [data-testid="stTextArea"] textarea {{
+    background:{t['input_bg']} !important; border:1px solid {t['border2']} !important;
+    color:{t['text']} !important; font-size:0.86rem !important; border-radius:4px !important;
+  }}
+  [data-baseweb="select"] * {{ color:{t['text']} !important; }}
+  [data-baseweb="popover"]  {{ background:{t['card']} !important; border:1px solid {t['border']} !important; }}
+  [data-baseweb="option"]:hover {{ background:{t['card2']} !important; }}
 
-  /* Widget labels */
   [data-testid="stWidgetLabel"] p,
-  label[data-testid] p { font-size: 0.8rem !important; color: #7d8590 !important; font-weight: 500; }
-
-  /* Alerts */
-  .stAlert { border-radius: 5px; font-size: 0.84rem; }
-
-  /* Page header breadcrumb */
-  .fl-breadcrumb {
-    font-size: 0.75rem; color: #444d56; text-transform: uppercase;
-    letter-spacing: 1px; font-weight: 600; margin-bottom: 6px;
-  }
+  label[data-testid] p {{ font-size:0.8rem !important; color:{t['muted']} !important; font-weight:500; }}
+  .stAlert {{ border-radius:5px; font-size:0.84rem; }}
+  .fl-breadcrumb {{
+    font-size:0.75rem; color:{t['label']}; text-transform:uppercase;
+    letter-spacing:1px; font-weight:600; margin-bottom:6px;
+  }}
 </style>
 """, unsafe_allow_html=True)
+
+_apply_theme()
 
 # ─── Session State Init ────────────────────────────────────────────────────────
 def _init_state():
@@ -318,6 +259,7 @@ def _init_state():
         "ai_history": [],
         "wizard_step": 1,
         "page": "🏠 Dashboard",
+        "theme": "Dark",
     }
     for key, val in defaults.items():
         if key not in st.session_state:
@@ -351,6 +293,14 @@ with st.sidebar:
                      key=f"nav_{page_key}", use_container_width=True, type=btn_type):
             st.session_state.page = page_key
             st.rerun()
+
+    st.markdown('<span class="sb-section">SETTINGS</span>', unsafe_allow_html=True)
+    chosen = st.selectbox("Theme", ["Dark", "Light"],
+                          index=0 if st.session_state.get("theme","Dark") == "Dark" else 1,
+                          key="theme_selector", label_visibility="collapsed")
+    if chosen != st.session_state.get("theme"):
+        st.session_state.theme = chosen
+        st.rerun()
 
     st.markdown('<span class="sb-section">MAIN</span>', unsafe_allow_html=True)
     _nav_btn("Dashboard",    "🏠 Dashboard",    "⊞")
